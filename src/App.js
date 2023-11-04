@@ -2,7 +2,7 @@
 import './App.css';
 import { DefaultSidebar } from './Components/Homepage';
 import {createBrowserRouter,RouterProvider} from "react-router-dom"
-import Login from "./Components/Login";
+import Login from "./Pages/Login";
 
 const router = createBrowserRouter([
     {
