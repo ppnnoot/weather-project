@@ -1,0 +1,53 @@
+.Navbar {
+    position: relative;
+}
+
+.Navbar input[type="search"] {
+    display: block;
+    width: 1px;
+    min-width: 0;
+    flex: auto;
+    border: 1px solid #CBD5E0;
+    background: transparent;
+    background-clip: padding-box;
+    padding: 0.25rem 3px;
+    font-size: 1rem;
+    font-weight: normal;
+    line-height: 1.6;
+    color: #4A5568;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.Navbar input[type="search"]:focus {
+    z-index: 3;
+    border: 1px solid #4299E1;
+    color: #90CDF4;
+    box-shadow: inset 0 0 0 1px rgba(59, 113, 202);
+}
+
+.Navbar input[type="search"]::placeholder {
+    color: #90CDF4;
+}
+
+.Navbar button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0.375rem 0.375rem 0;
+    background: #4299E1;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: #FFF;
+    box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.1);
+    transition: all 0.15s ease-in-out;
+}
+
+.Navbar button:hover,
+.Navbar button:focus {
+    background: #3182CE;
+    box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.15);
+}
