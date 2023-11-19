@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchWeather } from '../API/FetchWeather';
+import { fetchWeather } from '../../API/FetchWeather';
 
 export function Homepage() {
     const [todayWeather, setTodayWeather] = useState(null);
@@ -25,6 +25,7 @@ export function Homepage() {
                 <p>Loading...</p>
             ) : (
                 <div>
+                    <img src={`https://openweathermap.org/img/wn/${todayWeather.weather[0].icon}@2x.png`} className="icon-small" alt="weather"/>
                     <p>Location: {todayWeather.name}</p>
                     <p>Current Weather: {todayWeather.weather[0].description}</p>
                     <p>Temperature: {todayWeather.main.temp} °C</p>
@@ -38,6 +39,7 @@ export function Homepage() {
                     <h2>Weekly Forecast</h2>
                     {weekForecast.list.map((forecastItem, index) => (
                         <div key={index}>
+                            <img src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}.png`} className="icon-small" alt="weather"/>
                             <p>Date: {forecastItem.dt_txt}</p>
                             <p>Description: {forecastItem.weather[0].description}</p>
                             <p>Temperature: {forecastItem.main.temp} °C</p>

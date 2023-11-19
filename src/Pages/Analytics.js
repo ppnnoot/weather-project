@@ -1,5 +1,5 @@
 import NavBar from "../Components/Navbar/NavBar";
-import AnalyticsPage from "../Components/AnalyticsPage";
+import AnalyticsPage from "../Components/Analytics/AnalyticsPage";
 
 
 export default function Analytics(){

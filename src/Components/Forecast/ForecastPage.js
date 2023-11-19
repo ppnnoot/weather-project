@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchWeather } from '../API/FetchWeather';
+import { fetchWeather } from '../../API/FetchWeather';
 
 
 

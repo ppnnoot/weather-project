@@ -1,31 +1,40 @@
 import React, { useState } from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
 
-import {fetchLocation} from "../../API/FetchWeather";
-
-export const SearchBar = ({onSearchChange }) => {
+export const SearchBar = ({ onSearchChange }) => {
     const [input, setInput] = useState(null);
+
     const loadOptions = async (search, prevOptions, { page }) => {
-        const response = await fetch(`https://jsonplaceholder.typicode.com/users?q=${search}&_page=${page}&_limit=10`);
-        const json = await response.json();
+        try {
+            const response = await fetch(
+                `https://api.openweathermap.org/geo/1.0/direct?q=${search}&appid=87c1389b96ffca4894593c489a3c30af`
+            );
+            const json = await response.json();
 
-        const options = json.map(user => ({
-            label: user.name,
-            value: user.id
-        }));
+            const options = json.map(location => ({
+                label: location.name, // Fix typo here (was .name)
+                value: location.id
+            }));
 
-        return {
-            options,
-            hasMore: options.length === 10,
-            additional: {
-                page: page + 1
-            }
-        };
+            return {
+                options,
+                hasMore: options.length === 10,
+                additional: {
+                    page: page + 1
+                }
+            };
+        } catch (error) {
+            console.error('Error fetching location:', error);
+            // Handle the error, e.g., display an error message or fallback options
+            return {
+                options: [],
+                hasMore: false
+            };
+        }
     };
 
     const handleChange = selectedOption => {
         setInput(selectedOption);
-
     };
 
     return (
@@ -36,8 +45,8 @@ export const SearchBar = ({onSearchChange }) => {
                         value={input}
                         loadOptions={loadOptions}
                         onChange={handleChange}
-                        debounceTimeout={600} // เพิ่ม debounceTimeout ถ้าต้องการ
-                        placeholder="Search for users..."
+                        debounceTimeout={600} // Add debounceTimeout if needed
+                        placeholder="Search for locations..."
                     />
                 </div>
             </div>
