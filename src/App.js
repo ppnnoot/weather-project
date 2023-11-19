@@ -6,6 +6,8 @@ import Home from "./Pages/Home";
 import Test from "./Pages/Test";
 import Forecast from "./Pages/Forecast";
 import Analytics from "./Pages/Analytics";
+import Register from "./Pages/Register";
+
 
 const router = createBrowserRouter([
     {
@@ -27,8 +29,11 @@ const router = createBrowserRouter([
     {
         path: "/analytics",
         element: <Analytics/>
+    },
+    {
+        path: "/register",
+        element: <Register />
     }
-
 ])
 
 function App() {
