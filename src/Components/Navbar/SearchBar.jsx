@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
-import "../Navbar/Navbar.css"
+
 import {fetchLocation} from "../../API/FetchWeather";
 
 export const SearchBar = ({onSearchChange }) => {
