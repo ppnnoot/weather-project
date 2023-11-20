@@ -26,7 +26,7 @@ export default function AnalyticsPage() {
     }, []);
 
     return (
-        <div className="h-full flex flex-col justify-center ">
+        <>
             {loading ? (
                 <p>Loading...</p>
             ) : (
@@ -34,6 +34,7 @@ export default function AnalyticsPage() {
                     {error && <p>Error: {error}</p>}
                     {weekForecast.list.slice(0, 1).map((forecastItem) => (
                         <div key={forecastItem.dt}>
+                            
                             <div class="grid grid-cols-4 grid-rows-3 gap-x-5 gap-y-5">
                                 <div class="bg-black rounded-lg shadow-xl col-span-2 row-span-2">
                                     <div className="h-40 max-h-full text-white text-center row-span-2">
@@ -62,6 +63,6 @@ export default function AnalyticsPage() {
                     ))}
                 </div>
             )}
-        </div>
+        </>
     );
 }
