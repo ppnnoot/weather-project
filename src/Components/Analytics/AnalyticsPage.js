@@ -2,27 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchWeatherAsync } from "../../API/WeatherSlice";
 import { list } from '@material-tailwind/react';
+
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
+const lati = 13.736717
+const longti = 100.523186
+const current_Position = [lati, longti];
+
+const customMarkerIcon = new L.Icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/9356/9356230.png',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+});
 
 export default function AnalyticsPage() {
     const dispatch = useDispatch();
     const [position, setPosition] = useState(null)
     const { today, forecast, weekly, status, error } = useSelector((state) => state.weather);
     const lastsearch = useSelector((state) => state.weather.lastSearch)
-
-    const customMarkerIcon = new L.Icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/9356/9356230.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32],
-    });
-
-    const lati = 13.736717
-    const longti = 100.523186
-    const current_Position = [lati, longti];
 
 
     useEffect(() => {
@@ -85,7 +85,7 @@ export default function AnalyticsPage() {
                                         <Marker position={current_Position} icon={customMarkerIcon}>
                                             <Popup>
                                                 <div >
-                                                    <h2 clas="text-center">You were at</h2>
+                                                    <h2 class="text-center">You were at</h2>
                                                     <p>latitude:{lati} , longtitude{longti}</p>
                                                 </div>
                                             </Popup>
@@ -124,7 +124,7 @@ export default function AnalyticsPage() {
                                 </div>
                             </div>
                             <div className="bg-gray-800  rounded-lg shadow-xl col-span-4 p-4">
-                                <div className="h-full text-blue text-center flex space-x-3 overflow-hidden hover:overflow-x-scroll mb-3">
+                                <div className="h-full text-blue text-center flex space-x-3 overflow-x-hidden hover:overflow-x-scroll mb-3">
                                     {weekly.list
                                         .slice(0, forecastItem.count)
                                         .map((forecastItem) => (
