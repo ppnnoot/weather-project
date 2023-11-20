@@ -1,39 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import { fetchWeather } from '../../API/FetchWeather';
+import React, {useEffect, useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {fetchWeatherAsync} from "../../API/WeatherSlice";
 import { list } from '@material-tailwind/react';
 
 export default function AnalyticsPage() {
-    const [weekForecast, setWeekForecast] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [open, setOpen] = React.useState(1);
-
-    const handleOpen = (value) => setOpen(open === value ? 0 : value);
+    const dispatch = useDispatch();
+    const [position, setPosition] = useState(null)
+    const { today, forecast,weekly, status, error } = useSelector((state) => state.weather);
+    const lastsearch = useSelector((state)=> state.weather.lastSearch)
 
     useEffect(() => {
-        const fetchData = async () => {
             try {
-                const data = await fetchWeather();
-                setWeekForecast(data.forecast);
-            } catch (error) {
-                console.error('Error fetching weather:', error);
-                setError('Failed to fetch weather data');
-            } finally {
-                setLoading(false);
-            }
-        };
+                //console.log("lastsearch",lastsearch)
+                if (lastsearch) {
+                    //console.log("dispatch(fetchWeatherAsync(searchData.lat, searchData.lon)")
+                    const pos = { lat: lastsearch.value.lat, lon: lastsearch.value.lon };
+                    dispatch(fetchWeatherAsync(pos));
+                }else {
+                    const positionProm = new Promise((posResolve, posReject) => {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(
+                                (position) => posResolve(position.coords),
+                                (err) => posReject(new Error(err.message))
+                            );
+                        } else {
+                            posReject(new Error('Geolocation not supported'));
+                        }
+                    });
 
-        fetchData();
-    }, []);
+                    positionProm.then(({ latitude, longitude }) => {
+                        //console.log(latitude, longitude);
+                        const pos = { lat: latitude, lon: longitude };
+                        dispatch(fetchWeatherAsync(pos));
+                    })
+                }
+            }catch (err) {
+                    console.error('Error fetching weather data:', err);
+                }
+
+    }, [dispatch,lastsearch]);
+    if (status === 'loading') {
+        return <p>Loading...</p>;
+    }
+
+    if (error) {
+        return <p>Error: {error}</p>;
+    }
+
+    if (!today || !forecast) {
+        return <p>Loading....</p>;
+    }
 
     return (
         <>
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
+           
                 <div className="m-3 h-full">
                     {error && <p>Error: {error}</p>}
-                    {weekForecast.list.slice(0,1).map((forecastItem) => (
+                    {weekly.list.slice(0,1).map((forecastItem) => (
                         <div key={forecastItem.dt}>
                             
                             <div class="grid grid-cols-4 grid-rows-3 gap-x-5 gap-y-5">
@@ -58,7 +81,7 @@ export default function AnalyticsPage() {
                                 </div> */}
                                 <div class="bg-black rounded-lg shadow-xl col-span-4 ">
 
-                                    <div class="h-20 text-blue text-center flex flex-onwrap">{weekForecast.list.slice(0,(forecastItem.count)).map((forecastItem) => (
+                                    <div class="h-20 text-blue text-center flex flex-onwrap">{weekly.list.slice(0,(forecastItem.count)).map((forecastItem) => (
                                         <div key={forecastItem.dt}>
                                             <div class="h-full m-2 bg-white">
                                                 {forecastItem.main.temp}
@@ -72,7 +95,7 @@ export default function AnalyticsPage() {
                         </div>
                     ))}
                 </div>
-            )}
+            
         </>
     );
 }
