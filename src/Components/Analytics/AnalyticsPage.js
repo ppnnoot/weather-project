@@ -61,7 +61,6 @@ export default function AnalyticsPage() {
                         <div className="grid grid-cols-4 grid-rows-3 gap-5">
                             <div className="bg-gray-800 rounded-lg shadow-xl col-span-2 row-span-2 flex items-center justify-center p-4">
                                 <div className="h-40 text-white text-center">
-                                    {/* You can customize this section based on your design requirements */}
                                 </div>
                             </div>
                             <div className="bg-gray-800 rounded-lg shadow-xl flex items-center justify-center p-4">
