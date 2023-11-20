@@ -54,61 +54,63 @@ export default function AnalyticsPage() {
     return (
         <>
 
-<div className="m-3 h-full">
-  {error && <p className="text-red-500">Error: {error}</p>}
-  {weekly.list.slice(0, 1).map((forecastItem) => (
-    <div key={forecastItem.dt}>
-      <div className="grid grid-cols-4 grid-rows-3 gap-5">
-        <div className="bg-gray-800 rounded-lg shadow-xl col-span-2 row-span-2 flex items-center justify-center p-4">
-          <div className="h-40 text-white text-center">
-            {/* You can customize this section based on your design requirements */}
-          </div>
-        </div>
-        <div className="bg-gray-800 rounded-lg shadow-xl flex items-center justify-center p-4">
-          <div className="h-40 text-white text-center">
-            Date <br />
-            {forecastItem.dt_txt}
-          </div>
-        </div>
-        <div className="bg-gray-800 rounded-lg shadow-xl flex items-center justify-center p-4">
-          <div className="h-40 text-white text-center">
-            Temp: {forecastItem.main.temp}°C <br />
-            Temp Min/Max: <br />
-            {forecastItem.main.temp_min}°C/{forecastItem.main.temp_max}°C
-            <br />
-            Feels Like: {forecastItem.main.feels_like}°C
-          </div>
-        </div>
-        <div className="bg-gray-800 rounded-lg shadow-xl col-span-1 flex items-center justify-center p-4">
-          <div className="h-40 text-white text-center">
-            Wind <br />
-            Speed: {forecastItem.wind.speed}<br />
-            Deg: {forecastItem.wind.deg}<br />
-            Gust: {forecastItem.wind.gust}
-          </div>
-        </div>
-        <div className="bg-gray-800 rounded-lg shadow-xl col-span-1 flex items-center justify-center p-4">
-          <div className="h-40 text-white text-center">
-            Pressure: {forecastItem.main.pressure} <br />
-            Sea level: {forecastItem.main.sea_level}<br />
-            Humidity: {forecastItem.main.humidity}
-          </div>
-        </div>
-        <div className="bg-gray-800 rounded-lg shadow-xl col-span-4 p-4">
-          <div className="h-20 text-blue text-center flex space-x-2 overflow-x-auto">
-            {weekly.list
-              .slice(0, forecastItem.count)
-              .map((forecastItem) => (
-                <div key={forecastItem.dt} className="h-full bg-white p-2 rounded">
-                  {forecastItem.main.temp}
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
+            <div className="m-3 h-full">
+                {error && <p className="text-red-500">Error: {error}</p>}
+                {weekly.list.slice(0, 1).map((forecastItem) => (
+                    <div key={forecastItem.dt}>
+                        <div className="grid grid-cols-4 grid-rows-3 gap-5">
+                            <div className="bg-gray-800 rounded-lg shadow-xl col-span-2 row-span-2 flex items-center justify-center p-4">
+                                <div className="h-40 text-white text-center">
+                                    {/* You can customize this section based on your design requirements */}
+                                </div>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg shadow-xl flex items-center justify-center p-4">
+                                <div className="h-40 text-white text-center">
+                                    Date <br />
+                                    {forecastItem.dt_txt}
+                                </div>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg shadow-xl flex items-center justify-center p-4">
+                                <div className="h-40 text-white text-center">
+                                    Temp: {forecastItem.main.temp}°C <br />
+                                    Temp Min/Max: <br />
+                                    {forecastItem.main.temp_min}°C/{forecastItem.main.temp_max}°C
+                                    <br />
+                                    Feels Like: {forecastItem.main.feels_like}°C
+                                </div>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg shadow-xl col-span-1 flex items-center justify-center p-4">
+                                <div className="h-40 text-white text-center">
+                                    Wind <br />
+                                    Speed: {forecastItem.wind.speed}<br />
+                                    Deg: {forecastItem.wind.deg}<br />
+                                    Gust: {forecastItem.wind.gust}
+                                </div>
+                            </div>
+                            <div className="bg-gray-800 rounded-lg shadow-xl col-span-1 flex items-center justify-center p-4">
+                                <div className="h-40 text-white text-center">
+                                    Pressure: {forecastItem.main.pressure} <br />
+                                    Sea level: {forecastItem.main.sea_level}<br />
+                                    Humidity: {forecastItem.main.humidity}
+                                </div>
+                            </div>
+                            <div className="bg-gray-800  rounded-lg shadow-xl col-span-4 p-4">
+                                <div className="h-full text-blue text-center flex space-x-3 overflow-hidden hover:overflow-x-scroll mb-3">
+                                    {weekly.list
+                                        .slice(0, forecastItem.count)
+                                        .map((forecastItem) => (
+                                            <div className='w-40 h-full bg-white p-2 rounded'>
+                                                <div key={forecastItem.dt} className="" style={{ width: '100px' }}>
+                                                    {forecastItem.main.temp}
+                                                </div>
+                                            </div>
+                                        ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
 
         </>
     );
