@@ -1,11 +1,13 @@
-import {Homepage} from "../Components/Homepage";
-import Sidebar from "../Components/NavBar";
+import {Homepage} from "../Components/Home/Homepage";
+import NavBar from "../Components/Navbar/NavBar";
+import {SearchResultList} from "../Components/Navbar/SearchResultList";
 
 
 export default function Home(){
     return(
         <div>
-            <Sidebar/>
+            <NavBar/>
+            <SearchResultList />
             <Homepage />
         </div>
     )

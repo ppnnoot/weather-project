@@ -1,11 +1,12 @@
-import NavBar from "../Components/NavBar";
-import ForecastPage from "../Components/ForecastPage";
+import NavBar from "../Components/Navbar/NavBar";
+import ForecastPage from "../Components/Forecast/ForecastPage";
 
 export default function Forecast(){
     return(
         <>
             <NavBar />
             <ForecastPage />
+            
         </>
     )
 }
