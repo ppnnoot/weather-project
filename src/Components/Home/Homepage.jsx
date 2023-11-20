@@ -1,53 +1,72 @@
-import React, { useEffect, useState } from 'react';
-import { fetchWeather } from '../../API/FetchWeather';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {fetchWeatherAsync} from "../../API/WeatherSlice";
 
-export function Homepage() {
-    const [todayWeather, setTodayWeather] = useState(null);
-    const [weekForecast, setWeekForecast] = useState(null);
+export const Homepage = (searchData) => {
+    const dispatch = useDispatch();
+    //const todayWeather = useSelector((state) => state.weather.today);
+    //const weekForecast = useSelector((state) => state.forecast);
+    const { today, forecast, status, error } = useSelector((state) => state.weather);
+    //const [today, forecast] = fetchWeather(13.708,100.5831)
+    //console.log(today)
 
     useEffect(() => {
-        const fetchData = async () => {
             try {
-                const data = await fetchWeather();
-                setTodayWeather(data.weather);
-                setWeekForecast(data.forecast)
-            } catch (error) {
-                console.error('Error fetching weather:', error);
-            }
-        };
+                if (searchData.lat !== undefined && searchData.lon !== undefined) {
+                    //dispatch(fetchWeatherAsync(searchData.lat, searchData.lon));
+                }else {
+                    const positionProm = new Promise((posResolve, posReject) => {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(
+                                (position) => posResolve(position.coords),
+                                (err) => posReject(new Error(err.message))
+                            );
+                        } else {
+                            posReject(new Error('Geolocation not supported'));
+                        }
+                    });
 
-        fetchData();
-    }, []);
-    console.log(weekForecast)
+                    positionProm.then(({ latitude, longitude }) => {
+                        console.log(latitude, longitude);
+                        let location = {latitude,longitude}
+                        dispatch(fetchWeatherAsync(location));
+                    })
+                }
+            }catch (err) {
+                    console.error('Error fetching weather data:', err);
+                }
+
+    }, [dispatch,searchData]);
+    if (status === 'loading') {
+        return <p>Loading...</p>;
+    }
+
+    if (error) {
+        return <p>Error: {error}</p>;
+    }
+
+    if (!today || !forecast) {
+        return <p>No weather data available.</p>;
+    }
+    //console.log({"วันนี้": todayWeather})
+
     return (
-        <div className={'container mx-auto'}>
-            {todayWeather === null ? (
-                <p>Loading...</p>
-            ) : (
-                <div>
-                    <img src={`https://openweathermap.org/img/wn/${todayWeather.weather[0].icon}@2x.png`} className="icon-small" alt="weather"/>
-                    <p>Location: {todayWeather.name}</p>
-                    <p>Current Weather: {todayWeather.weather[0].description}</p>
-                    <p>Temperature: {todayWeather.main.temp} °C</p>
-                </div>
-            )}
+        <div>
+            {/* Use today and forecast data here */}
+            <p>Location: {today.name}</p>
+            <p>Current Weather: {today.weather[0].description}</p>
+            <p>Temperature: {today.main.temp} °C</p>
 
-            {weekForecast === null ? (
-                <p>Loading...</p>
-            ) : (
-                <div>
-                    <h2>Weekly Forecast</h2>
-                    {weekForecast.list.map((forecastItem, index) => (
-                        <div key={index}>
-                            <img src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}.png`} className="icon-small" alt="weather"/>
-                            <p>Date: {forecastItem.dt_txt}</p>
-                            <p>Description: {forecastItem.weather[0].description}</p>
-                            <p>Temperature: {forecastItem.main.temp} °C</p>
-                            <hr />
-                        </div>
-                    ))}
+            <h2>Weekly Forecast</h2>
+            {forecast.map((forecastItem, index) => (
+                <div key={index}>
+                    <img src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}@2x.png`}/>
+                    <p>Date: {forecastItem.dt_txt}</p>
+                    <p>Description: {forecastItem.weather[0].description}</p>
+                    <p>Temperature: {forecastItem.main.temp} °C</p>
+                    <hr />
                 </div>
-            )}
+            ))}
         </div>
     );
-}
+};
