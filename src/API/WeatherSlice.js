@@ -4,10 +4,11 @@ import {fetchWeather} from "./FetchWeather";
 
 export const fetchWeatherAsync = createAsyncThunk(
     'weather/fetchWeather',
-    async ({latitude,longitude})=>{
+    async (pos)=>{
         try {
-            const data = await fetchWeather(latitude,longitude)
-            console.log("data")
+            //console.log(pos)
+            const data = await fetchWeather(pos.lat,pos.lon)
+            //console.log(data)
             return data
         }catch (err){
             console.error('Error fetching weather data:', err);
@@ -21,10 +22,15 @@ export const weatherSlice = createSlice({
     initialState:{
         today: null,
         forecast: null,
+        weekly: null,
+        lastSearch: null,
         status: 'idle',
         error: null
     },
     reducers:{
+        updateSearch:(state,action)=>{
+            state.lastSearch = action.payload
+        }
     },
     extraReducers:(builder)=>{
         builder
@@ -35,6 +41,7 @@ export const weatherSlice = createSlice({
                 state.status = "idle";
                 state.today = action.payload.today;
                 state.forecast = action.payload.forecast;
+                state.weekly = action.payload.weekly;
             })
             .addCase(fetchWeatherAsync.rejected, (state, action) => {
                 state.status = 'idle';
@@ -44,4 +51,5 @@ export const weatherSlice = createSlice({
     }
 })
 
+export const {updateSearch} = weatherSlice.actions;
 export default weatherSlice.reducer
