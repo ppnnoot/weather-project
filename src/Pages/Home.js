@@ -1,6 +1,7 @@
-import {Homepage} from "../Components/Home/Homepage";
+import Homepage from "../Components/Home/Homepage";
 import NavBar from "../Components/Navbar/NavBar";
-import {SearchBar} from "../Components/Navbar/SearchBar";
+import {useState} from "react";
+
 
 
 export default function Home(){
