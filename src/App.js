@@ -19,10 +19,6 @@ const router = createBrowserRouter([
         element: <Login />
     },
     {
-        path: '/test',
-        element: <Test />
-    },
-    {
         path: '/forecast',
         element: <Forecast />
     },

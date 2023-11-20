@@ -59,8 +59,8 @@ export const fetchWeather = (latitude, longitude) => {
                 return forecastDate === curDateString
             })
 
-            const weatherData = { today: weatherRes.data, forecast: filteredForcast};
-            console.log(weatherData);
+            const weatherData = { today: weatherRes.data, forecast: filteredForcast, weekly: forecastRes.data};
+            //console.log(weatherData);
             resolve(weatherData );
         } catch (error) {
             console.error('Error fetching weather data:', error);

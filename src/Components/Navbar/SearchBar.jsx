@@ -1,22 +1,24 @@
 import React, { useState } from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
 import {fetchLocation} from "../../API/FetchWeather";
+import {useDispatch} from "react-redux";
+import {updateSearch} from "../../API/WeatherSlice";
 
 export const SearchBar = ({ onSearchChange }) => {
     const [input, setInput] = useState(null);
-
+    const dispatch = useDispatch();
     const loadOptions = async (search) => {
         try {
             const data = await fetchLocation(search);
             //console.log(data)
             const options = data.map(location => ({
-                label: `${location.name}, ${location.country} ${location.local_names?.th || ""}  `, // Fix typo here (was .name)
+                label: `${location.name}, ${location.country} ${location.state || ""}  `, // Fix typo here (was .name)
                 value: {
                     lat: location.lat,
                     lon: location.lon
                 }
             }));
-
+            console.log(options)
             return {
                 options,
             }
@@ -28,10 +30,13 @@ export const SearchBar = ({ onSearchChange }) => {
 
         }
     };
-    //console.log(setInput)
+
     const handleChange = selectedOption => {
         setInput(selectedOption);
+        //onSearchChange(selectedOption)
+        dispatch(updateSearch(selectedOption))
     };
+    //console.log(input)
 
     return (
         <div className="">

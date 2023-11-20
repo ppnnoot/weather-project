@@ -1,19 +1,20 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {fetchWeatherAsync} from "../../API/WeatherSlice";
 
-export const Homepage = (searchData) => {
+export default function Homepage(){
     const dispatch = useDispatch();
-    //const todayWeather = useSelector((state) => state.weather.today);
-    //const weekForecast = useSelector((state) => state.forecast);
+    const [position, setPosition] = useState(null)
     const { today, forecast, status, error } = useSelector((state) => state.weather);
-    //const [today, forecast] = fetchWeather(13.708,100.5831)
-    //console.log(today)
+    const lastsearch = useSelector((state)=> state.weather.lastSearch)
 
     useEffect(() => {
             try {
-                if (searchData.lat !== undefined && searchData.lon !== undefined) {
-                    //dispatch(fetchWeatherAsync(searchData.lat, searchData.lon));
+                //console.log("lastsearch",lastsearch)
+                if (lastsearch) {
+                    //console.log("dispatch(fetchWeatherAsync(searchData.lat, searchData.lon)")
+                    const pos = { lat: lastsearch.value.lat, lon: lastsearch.value.lon };
+                    dispatch(fetchWeatherAsync(pos));
                 }else {
                     const positionProm = new Promise((posResolve, posReject) => {
                         if (navigator.geolocation) {
@@ -27,16 +28,16 @@ export const Homepage = (searchData) => {
                     });
 
                     positionProm.then(({ latitude, longitude }) => {
-                        console.log(latitude, longitude);
-                        let location = {latitude,longitude}
-                        dispatch(fetchWeatherAsync(location));
+                        //console.log(latitude, longitude);
+                        const pos = { lat: latitude, lon: longitude };
+                        dispatch(fetchWeatherAsync(pos));
                     })
                 }
             }catch (err) {
                     console.error('Error fetching weather data:', err);
                 }
 
-    }, [dispatch,searchData]);
+    }, [dispatch,lastsearch]);
     if (status === 'loading') {
         return <p>Loading...</p>;
     }
@@ -46,10 +47,8 @@ export const Homepage = (searchData) => {
     }
 
     if (!today || !forecast) {
-        return <p>No weather data available.</p>;
+        return <p>Loading....</p>;
     }
-    //console.log({"วันนี้": todayWeather})
-
     return (
         <div>
             {/* Use today and forecast data here */}
