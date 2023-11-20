@@ -1,33 +1,14 @@
+
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchWeatherAsync } from "../../API/WeatherSlice";
 import { list } from '@material-tailwind/react';
 
-
-
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-
-
-
-
 export default function AnalyticsPage() {
     const dispatch = useDispatch();
     const [position, setPosition] = useState(null)
     const { today, forecast, weekly, status, error } = useSelector((state) => state.weather);
-    //Map Section
-    const customMarkerIcon = new L.Icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/9356/9356230.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32],
-    });
-
-    const lati = 13.736717
-    const longti = 100.523186
-    const current_Position = [lati, longti];
-
+    const lastsearch = useSelector((state) => state.weather.lastSearch)
 
     useEffect(() => {
         try {
@@ -73,31 +54,13 @@ export default function AnalyticsPage() {
 
     return (
         <>
-
             <div className="m-3 h-full">
                 {error && <p className="text-red-500">Error: {error}</p>}
                 {weekly.list.slice(0, 1).map((forecastItem) => (
                     <div key={forecastItem.dt}>
                         <div className="grid grid-cols-4 grid-rows-3 gap-5">
-                            <div class="bg-black rounded-lg shadow-xl col-span-2 row-span-2">
-                                <div className="h-40 text-white text-center col-span-2 row-span-2">
-                                    <MapContainer
-                                        center={current_Position}
-                                        zoom={13}
-                                        style={{ height: '200%', width: '100%' }}
-                                    >
-                                        <TileLayer
-                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        />
-                                        <Marker position={current_Position} icon={customMarkerIcon}>
-                                            <Popup>
-                                                <div >
-                                                    <h2 clas="text-center">You were at</h2>
-                                                    <p>latitude:{lati} , longtitude{longti}</p>
-                                                </div>
-                                            </Popup>
-                                        </Marker>
-                                    </MapContainer>
+                            <div className="bg-gray-800 rounded-lg shadow-xl col-span-2 row-span-2 flex items-center justify-center p-4">
+                                <div className="h-40 text-white text-center">
                                 </div>
                             </div>
                             <div className="bg-gray-800 rounded-lg shadow-xl flex items-center justify-center p-4">
