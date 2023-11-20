@@ -1,13 +1,12 @@
 import {Homepage} from "../Components/Home/Homepage";
 import NavBar from "../Components/Navbar/NavBar";
-import {SearchResultList} from "../Components/Navbar/SearchResultList";
+import {SearchBar} from "../Components/Navbar/SearchBar";
 
 
 export default function Home(){
     return(
         <div>
-            <NavBar/>
-            <SearchResultList />
+            <NavBar />
             <Homepage />
         </div>
     )

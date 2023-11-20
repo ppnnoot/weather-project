@@ -2,57 +2,35 @@ import axios from 'axios';
 
 const WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/weather"
 const FORECAST_API_URL = "https://api.openweathermap.org/data/2.5/forecast"
+const GEO_API_URL = "https://api.openweathermap.org/geo/1.0/direct"
 const WEATHER_API_KEY = "87c1389b96ffca4894593c489a3c30af"
 
-export async function getCurLocation(){
-    try {
-        if (navigator.geolocation) {
-            return navigator.geolocation.getCurrentPosition;
-        } else {
-            return "Geolocation is not supported by this browser.";
-        }
+export async function fetchLocation(input) {
+    return new Promise( async (resolve,reject) =>{
+        if(input === "")
+            input = "thailand"
 
-    }catch (e) {
-
-    }
-}
-
-export async function fetchLocation() {
-    try {
-        const response = await axios.get('https://opend.data.go.th/get-ckan/datastore_search', {
-            params: {
-                resource_id: '48039a2a-2f01-448c-b2a2-bb0d541dedcd'
-            },
-            headers: {
-                'api-key': 'SaUHKkyfVLjb7u6mCSO0ziXXAeDyuGOu',
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-            }
-        });
-
-
-        console.log(JSON.stringify(response.data)); // ทำอย่างอื่นกับข้อมูลที่ได้รับได้ที่นี่
-        return response.data; // ส่งข้อมูลออกไป
-    } catch (error) {
-        console.log(error);
-        throw error; // โยน error ออกไปสำหรับการจัดการที่ตัวเรียกฟังก์ชัน fetchLocation
-    }
-}
-
-export async function fetchWeather() {
-    return new Promise(async (resolve, reject) => {
-        const positionProm = new Promise((posResolve,posReject)=>{
-           if(navigator.geolocation){
-               navigator.geolocation.getCurrentPosition(
-                   (position) => posResolve(position.coords),
-                   (err)=> posReject(new err(err.message))
-               )
-           }else {
-               posReject(new Error('Geolocation not supported'));
-           }
-        });
         try {
-            const { latitude, longitude } = await positionProm;
+
+            const response = await axios.get(GEO_API_URL,{
+                params:{
+                    q: input,
+                    appid: WEATHER_API_KEY,
+                    limit: 10
+                }
+            });
+            resolve(response.data)
+
+        } catch (err) {
+            reject(err)
+        }
+    })
+
+}
+
+export const fetchWeather = (latitude, longitude) => {
+    return new Promise(async (resolve, reject) => {
+        try {
             const [weatherRes, forecastRes] = await Promise.all([
                 axios.get(WEATHER_API_URL, {
                     params: {
@@ -73,12 +51,24 @@ export async function fetchWeather() {
                     },
                 }),
             ]);
-            resolve({weather: weatherRes.data, forecast: forecastRes.data})
+            const curDate = new Date()
+            const curDateString = curDate.toISOString().split('T')[0]
+            const filteredForcast = forecastRes.data.list.filter((item)=>{
+                const forecastDate = item.dt_txt.split(' ')[0]
 
+                return forecastDate === curDateString
+            })
+
+            const weatherData = { today: weatherRes.data, forecast: filteredForcast};
+            console.log(weatherData);
+            resolve(weatherData );
         } catch (error) {
+            console.error('Error fetching weather data:', error);
             reject(error);
         }
     });
-}
+};
+
+
 
 
