@@ -30,7 +30,7 @@ export default function AnalyticsPage() {
             {loading ? (
                 <p>Loading...</p>
             ) : (
-                <div className="mt-1 sm:mx-auto sm:w-full sm:max-w-sm">
+                <div className="m-3">
                     {error && <p>Error: {error}</p>}
                     {weekForecast.list.slice(0, 1).map((forecastItem) => (
                         <div key={forecastItem.dt}>
