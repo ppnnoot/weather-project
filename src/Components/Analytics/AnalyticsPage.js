@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchWeatherAsync } from "../../API/WeatherSlice";
-import { list } from '@material-tailwind/react';
-import { fetchWeather } from "../../API/FetchWeather"
+// import { list } from '@material-tailwind/react';
+// import { fetchWeather } from "../../API/FetchWeather"
 
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 
-
-
-const lati = 13
+const lati = 13.75
 const longti = 100.523186
 const current_Position = [lati, longti];
 
@@ -39,8 +37,8 @@ export default function AnalyticsPage() {
       if (lastsearch) {
         const pos = { lat: lastsearch.value.lat, lon: lastsearch.value.lon };
         console.log(pos)
-        
-        
+
+
         dispatch(fetchWeatherAsync(pos));
       } else {
         const positionProm = new Promise((posResolve, posReject) => {
@@ -86,20 +84,30 @@ export default function AnalyticsPage() {
               <div className="bg-gray-800 rounded-lg shadow-xl col-span-2 row-span-2 items-center justify-center p-4">
                 <div className="h-full text-white text-center col-span-2 row-span-2">
                   <MapContainer
-                    center={current_Position}
+                    center={lastsearch ? [lastsearch.value.lat || 13.75, lastsearch.value.lon || 100] : current_Position}
                     zoom={13}
                     className="h-full w-full">
                     <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={current_Position} icon={customMarkerIcon}>
+                    {lastsearch && (
+                      <Marker position={[lastsearch.value.lat || 13.75, lastsearch.value.lon || 100]} icon={customMarkerIcon}>
+                        <Popup>
+                          <div>
+                            <h2 className="text-center">Location from Last Search</h2>
+                            <p>Latitude: {lastsearch.value.lat}, Longitude: {lastsearch.value.lon}</p>
+                          </div>
+                        </Popup>
+                      </Marker>
+                    )}
+                    {/* <Marker position={current_Position} icon={customMarkerIcon}>
                       <Popup>
                         <div >
                           <h2 class="text-center">You were at</h2>
                           <p>latitude:{lati} , longtitude{longti}</p>
                         </div>
                       </Popup>
-                    </Marker>
+                    </Marker> */}
                   </MapContainer>
                 </div>
               </div>
