@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchWeatherAsync } from "../../API/WeatherSlice";
 import { list } from '@material-tailwind/react';
+import { fetchWeather } from "../../API/FetchWeather"
 
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-const lati = 13.736717
+
+
+
+const lati = 13
 const longti = 100.523186
 const current_Position = [lati, longti];
 
@@ -34,6 +38,9 @@ export default function AnalyticsPage() {
     try {
       if (lastsearch) {
         const pos = { lat: lastsearch.value.lat, lon: lastsearch.value.lon };
+        console.log(pos)
+        
+        
         dispatch(fetchWeatherAsync(pos));
       } else {
         const positionProm = new Promise((posResolve, posReject) => {
@@ -71,7 +78,7 @@ export default function AnalyticsPage() {
 
   return (
     <>
-      <div className="m-3 h-full">
+      <div className="p-3 h-full ">
         {error && <p className="text-red-500">Error: {error}</p>}
         {weekly.list.slice(0, 1).map((forecastItem) => (
           <div key={forecastItem.dt}>
@@ -129,7 +136,7 @@ export default function AnalyticsPage() {
               <div className="bg-gray-800  rounded-lg shadow-xl col-span-4 p-4">
                 <div className="h-full text-blue text-center flex space-x-3 overflow-x-hidden hover:overflow-x-scroll mb-3">
                   {weekly.list.slice(0, forecastItem.count).map((forecastItem) => (
-                    <div className='w-40 h-full bg-white p-2 rounded'>
+                    <div className='w-40 h-full bg-white p-2 rounded cursor-pointer'>
                       <div key={forecastItem.dt} className="" style={{ width: '100px' }}
                         onClick={() => handleClick(forecastItem)}>
                         <img

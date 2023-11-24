@@ -6,9 +6,9 @@ export const fetchWeatherAsync = createAsyncThunk(
     'weather/fetchWeather',
     async (pos)=>{
         try {
-            //console.log(pos)
+            console.log(pos)
             const data = await fetchWeather(pos.lat,pos.lon)
-            //console.log(data)
+            console.log(data)
             return data
         }catch (err){
             console.error('Error fetching weather data:', err);
