@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { fetchWeather } from '../../API/FetchWeather';
-import {useDispatch, useSelector} from "react-redux";
-import {fetchWeatherAsync} from "../../API/WeatherSlice";
-
+import { useDispatch, useSelector } from "react-redux";
+import { fetchWeatherAsync } from "../../API/WeatherSlice";
+import "./ForecastPage.css"
 
 
 export default function ForecastPage() {
@@ -55,22 +55,45 @@ export default function ForecastPage() {
     return (
 
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
 
-                    <h2 className={"font-bold text-2xl"}>Weekly Forecast</h2>
-                    <p>Location: {today.name}</p>
-                    <p>Current Weather: {today.weather[0].description}</p>
-                    <p>Temperature: {today.main.temp} °C</p>
-                    {weekly.list.map((forecastItem, index) => (
-                        <div key={index}>
-                            <img src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}@2x.png`} className="icon-small" alt="weather" />
-                            <p>Date: {new Date(forecastItem.dt_txt).toLocaleDateString()}</p>
-                            <p>Description: {forecastItem.weather[0].description}</p>
-                            <p>Temperature: {forecastItem.main.temp} °C</p>
-                            <hr />
+                <div className="weather">
+                    <div className="top">
+                        <div>
+
+                            <p className={"city"}>{today.name}</p>
+                            <p className={"weather-detail"}>{today.weather[0].description}</p>
+
                         </div>
-                    ))}
+                        <img src={`https://openweathermap.org/img/wn/${today.weather[0].icon}@2x.png`} className="icon-small" alt="weather" />
+                    </div>
+
+                    <p className="temperature">{today.main.temp} °C</p>
                 </div>
+                <br></br>
+
+              
+            </div>
+            <p className={"hourhead"}>3 Hour Forecast</p>
+                <br></br>
+
+                {weekly.list.map((forecastItem, index) => (
+                    
+                    <div key={index}>
+                        <div className= "daily-item">
+                         <img src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}@2x.png`} className="icon-small2" alt="weather" />
+                         <label className='day'>{new Date(forecastItem.dt_txt).toLocaleDateString('th-TH', { weekday: 'long' })}
+
+                         <label className='time'>{new Date(forecastItem.dt_txt).toLocaleTimeString('th-TH', { hour: 'numeric', minute: 'numeric' })} น.</label>
+                         </label>
+                         <label className='description'>{forecastItem.weather[0].description}</label>
+                         <label className='min-max'>{forecastItem.main.temp} °C</label>
+
+                        <hr />
+                        </div>
+                    </div>
+                ))}
+           
 
         </div>
 
