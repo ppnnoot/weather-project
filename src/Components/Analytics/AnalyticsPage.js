@@ -84,14 +84,14 @@ export default function AnalyticsPage() {
               <div className="bg-gray-800 rounded-lg shadow-xl col-span-2 row-span-2 items-center justify-center p-4">
                 <div className="h-full text-white text-center col-span-2 row-span-2">
                   <MapContainer
-                    center={lastsearch ? [lastsearch.value.lat || 13.75, lastsearch.value.lon || 100] : current_Position}
+                    center={lastsearch ? [lastsearch.value.lat, lastsearch.value.lon] : current_Position}
                     zoom={13}
                     className="h-full w-full">
                     <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     {lastsearch && (
-                      <Marker position={[lastsearch.value.lat || 13.75, lastsearch.value.lon || 100]} icon={customMarkerIcon}>
+                      <Marker position={[lastsearch.value.lat, lastsearch.value.lon]} icon={customMarkerIcon}>
                         <Popup>
                           <div>
                             <h2 className="text-center">Location from Last Search</h2>
@@ -100,14 +100,6 @@ export default function AnalyticsPage() {
                         </Popup>
                       </Marker>
                     )}
-                    {/* <Marker position={current_Position} icon={customMarkerIcon}>
-                      <Popup>
-                        <div >
-                          <h2 class="text-center">You were at</h2>
-                          <p>latitude:{lati} , longtitude{longti}</p>
-                        </div>
-                      </Popup>
-                    </Marker> */}
                   </MapContainer>
                 </div>
               </div>
