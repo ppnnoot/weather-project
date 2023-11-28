@@ -1,0 +1,131 @@
+.container-weather {
+    width: 900px;
+    height: 1000px;
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.container-top{
+    width: 100%;
+    height: 300px;
+    border: 1px solid;
+    border-radius: 50px;
+    padding: 20px;
+    display: flex;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    transition: background-color 1s ease;
+    color: black;
+}
+.container-top .left-top{
+    width: 50%;
+    height: 100%;
+   
+    
+}
+
+.container-top .right-top{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+
+}
+
+.container-botton{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+}
+
+.font-temp{
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.font-weater{
+    font-size: 50px;
+    text-align: center;
+    padding-left: 150px;
+}
+
+.font-CurrentWeather{
+    padding-left: 300px;
+}
+
+.font-details{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    
+    justify-content: end;
+}
+
+.font-details:hover{
+    text-decoration: underline;
+}
+
+.frame-time{
+    border: 1px solid;
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); 
+    background-color: rgba(153, 153, 153, 0.445);
+}
+
+.top-box{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    
+    
+}
+
+.botton-box{
+    width: 100%;
+    height: 50%;
+    padding: 10px;
+    
+}
+
+.pic-top{
+    display: flex;
+    align-items: center;
+}
+
+.font-weater-botton{
+    font-size: 25px;
+    
+}
+
+.weather-botton{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;
+}
+
+.font-temp-button{
+    font-size: 15px;
+    padding-left: 50px;
+    padding-bottom: 1px;
+    
+}
+
+.weather-icon {
+    width: 150px; /* ปรับขนาดตามที่ต้องการ */
+    height: 150px; /* ปรับขนาดตามที่ต้องการ */
+}
+
+.icon-right{
+    width: 15px;
+    height: 15px;
+}
+
