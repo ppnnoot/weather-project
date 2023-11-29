@@ -3,10 +3,10 @@ import './App.css';
 import {createBrowserRouter,RouterProvider} from "react-router-dom"
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
-import Test from "./Pages/Test";
 import Forecast from "./Pages/Forecast";
 import Analytics from "./Pages/Analytics";
 import Register from "./Pages/Register";
+import {Protected} from "./Components/Protected";
 
 
 const router = createBrowserRouter([
@@ -20,11 +20,19 @@ const router = createBrowserRouter([
     },
     {
         path: '/forecast',
-        element: <Forecast />
+        element: (
+            <Protected>
+                <Forecast />
+            </Protected>
+        ),
     },
     {
         path: "/analytics",
-        element: <Analytics/>
+        element: (
+            <Protected>
+                <Analytics/>
+            </Protected>
+            ),
     },
     {
         path: "/register",
@@ -34,9 +42,12 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <main>
-      <RouterProvider router={router} />
-    </main>
+      <>
+          <div className={'App'}>
+              <RouterProvider router={router} />
+          </div>
+      </>
+
   );
 }
 

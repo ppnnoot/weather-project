@@ -1,14 +1,21 @@
+import {useDispatch, useSelector} from "react-redux";
+import {loginUserAsync, selectError, selectLoginUser} from "../API/AuthSlice";
+import {useForm} from 'react-hook-form'
+import {Navigate} from "react-router-dom";
+
+
 export default function LoginPage(){
+    const dispatch = useDispatch()
+    const err = useSelector(selectError)
+    const user = useSelector(selectLoginUser)
+    const {
+        register,
+        handleSubmit,
+        formState: {errors},
+    } = useForm()
     return(
         <>
-            {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
+            {user && <Navigate to={'/'} replace={true}></Navigate> }
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     {/* <img
@@ -22,7 +29,10 @@ export default function LoginPage(){
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" noValidate onSubmit={handleSubmit((data)=>{
+                        console.log(data)
+                        dispatch(loginUserAsync({email: data.email, password: data.password}))
+                    })}>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                 Email address
@@ -30,10 +40,9 @@ export default function LoginPage(){
                             <div className="mt-2">
                                 <input
                                     id="email"
-                                    name="email"
-                                    type="email"
-                                    autoComplete="email"
-                                    required
+                                    {...register('email',{
+                                        required: 'email is required'
+                                    })}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -53,13 +62,15 @@ export default function LoginPage(){
                             <div className="mt-2">
                                 <input
                                     id="password"
-                                    name="password"
+                                    {...register('password',{
+                                        required: 'password is required'
+                                    })}
                                     type="password"
                                     autoComplete="current-password"
-                                    required
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
+                            {err && <p className={'text-red-500'}>{err || err.message }</p>}
                         </div>
 
                         <div>
