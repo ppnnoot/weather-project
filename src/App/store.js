@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {configureStore} from "@reduxjs/toolkit"
 import weatherReducer from '../API/WeatherSlice'
 import authReducer from '../API/AuthSlice'
@@ -17,9 +18,20 @@ export const store = configureStore({
     //import {weatherSlice} from "../API/WeatherSlice";
 
 
+=======
+    import {configureStore} from "@reduxjs/toolkit"
+    import weatherReducer from '../API/WeatherSlice'
+    //import {weatherSlice} from "../API/WeatherSlice";
+
+
+>>>>>>> c8a79ca56092e71d2cb473d09d80cb6307d879cd
     export const store = configureStore({
         reducer:{
             weather: weatherReducer
         }
+<<<<<<< HEAD
     })
 >>>>>>> c29cd3e4cb12bc26c9088dd6f5b2ae72ed95986e
+=======
+    })
+>>>>>>> c8a79ca56092e71d2cb473d09d80cb6307d879cd
