@@ -9,10 +9,15 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 export default function AnalyticsPage() {
     const dispatch = useDispatch();
-    const [position, setPosition] = useState(null)
+    const [selectedItem, setSelectedItem] = useState({});
     const { today, forecast, weekly, status, error } = useSelector((state) => state.weather);
     const lastsearch = useSelector((state) => state.weather.lastSearch)
 
+    const handleClick = (forecastItem) => {
+      setSelectedItem(forecastItem);
+      console.log('Clicked on forecast item:', selectedItem);
+    };
+  
     const customMarkerIcon = new L.Icon({
         iconUrl: 'https://cdn-icons-png.flaticon.com/512/9356/9356230.png',
         iconSize: [32, 32],
@@ -91,60 +96,60 @@ export default function AnalyticsPage() {
                                     </MapContainer>
                                 </div>
                             </div>
-                            <div className="bg-gray-800 rounded-lg shadow-xl flex items-center justify-center p-4">
-                                <div className="h-40 text-white text-center">
-                                    Date <br />
-                                    {forecastItem.dt_txt}
-                                </div>
-                            </div>
-                            <div className="bg-gray-800 rounded-lg shadow-xl flex items-center justify-center p-4">
-                                <div className="h-40 text-white text-center">
-                                    Temp: {forecastItem.main.temp}°C <br />
-                                    Temp Min/Max: <br />
-                                    {forecastItem.main.temp_min}°C/{forecastItem.main.temp_max}°C
-                                    <br />
-                                    Feels Like: {forecastItem.main.feels_like}°C
-                                </div>
-                            </div>
-                            <div className="bg-gray-800 rounded-lg shadow-xl col-span-1 flex items-center justify-center p-4">
-                                <div className="h-40 text-white text-center">
-                                    Wind <br />
-                                    Speed: {forecastItem.wind.speed}<br />
-                                    Deg: {forecastItem.wind.deg}<br />
-                                    Gust: {forecastItem.wind.gust}
-                                </div>
-                            </div>
-                            <div className="bg-gray-800 rounded-lg shadow-xl col-span-1 flex items-center justify-center p-4">
-                                <div className="h-40 text-white text-center">
-                                    Pressure: {forecastItem.main.pressure} <br />
-                                    Sea level: {forecastItem.main.sea_level}<br />
-                                    Humidity: {forecastItem.main.humidity}
-                                </div>
-                            </div>
-                            <div className="bg-gray-800  rounded-lg shadow-xl col-span-4 p-4">
-                                <div className="h-full text-blue text-center flex space-x-3 overflow-hidden hover:overflow-x-scroll mb-3">
-                                    {weekly.list
-                                        .slice(0, forecastItem.count)
-                                        .map((forecastItem) => (
-                                            <div className='w-40 h-full bg-white p-2 rounded'>
-                                                <div key={forecastItem.dt} className="" style={{ width: '100px' }}>
-                                                    <img
-                                                        src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}@2x.png`}
-                                                        className="icon-small shadow-md"
-                                                        alt="weather"
-                                                    />
-                                                    <p className='text-orange-300'>{new Date(forecastItem.dt_txt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</p>
-                                                    <p>{new Date(forecastItem.dt_txt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                                                    <p>{forecastItem.main.temp} °C</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                </div>
-                            </div>
-                        </div>
+                            <div className="bg-gray-800 rounded-lg flex items-center justify-center p-4">
+                <div className="h-40 text-white text-center" style={{ fontSize: '18px', lineHeight: '24px' }}>
+                  Date and Time<br />
+                  {selectedItem.dt_txt ?? forecastItem.dt_txt}
+                </div>
+              </div>
+              <div className="bg-gray-800 rounded-lg shadow-xl flex items-center justify-center p-4">
+                <div className="h-40 text-white text-center" style={{ fontSize: '18px', lineHeight: '24px' }}>
+                  Temperature <br />
+                  Temp: {selectedItem.main?.temp ?? forecastItem.main.temp}°C <br />
+                  Temp Min: {selectedItem.main?.temp_min ?? forecastItem.main.temp_min}°C<br />
+                  Temp Max: {selectedItem.main?.temp_max ?? forecastItem.main.temp_max}°C<br />
+                  Feels Like: {selectedItem.main?.feels_like ?? forecastItem.main.feels_like}°C
+                </div>
+              </div>
+              <div className="bg-gray-800 rounded-lg shadow-xl col-span-1 flex items-center justify-center p-4">
+                <div className="h-40 text-white text-center" style={{ fontSize: '18px', lineHeight: '24px' }}>
+                  Wind <br />
+                  Speed: {selectedItem.wind?.speed ?? forecastItem.wind.speed}<br />
+                  Deg: {selectedItem.wind?.deg ?? forecastItem.wind.deg}<br />
+                  Gust: {selectedItem.wind?.gust ?? forecastItem.wind.gust}
+                </div>
+              </div>
+              <div className="bg-gray-800 rounded-lg shadow-xl col-span-1 flex items-center justify-center p-4">
+                <div className="h-40 text-white text-center" style={{ fontSize: '18px', lineHeight: '24px' }}>
+                  Atmosphere <br />
+                  Pressure: {selectedItem.main?.pressure ?? forecastItem.main.pressure} <br />
+                  Sea level: {selectedItem.main?.sea_level ?? forecastItem.main.sea_level}<br />
+                  Humidity: {selectedItem.main?.humidity ?? forecastItem.main.humidity}
+                </div>
+              </div>
+              <div className="bg-gray-800  rounded-lg shadow-xl col-span-4 p-4">
+                <div className="h-full text-blue text-center flex space-x-3 overflow-x-hidden hover:overflow-x-scroll mb-3">
+                  {weekly.list.slice(0, forecastItem.count).map((forecastItem) => (
+                    <div className='w-40 h-full bg-white p-2 rounded'>
+                      <div key={forecastItem.dt} className="" style={{ width: '100px' }}
+                        onClick={() => handleClick(forecastItem)}>
+                        <img
+                          src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}@2x.png`}
+                          className="icon-small shadow-md"
+                          alt="weather"
+                        />
+                        <p className='text-orange-300'>{new Date(forecastItem.dt_txt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</p>
+                        <p>{new Date(forecastItem.dt_txt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        <p>{forecastItem.main.temp} °C</p>
+                      </div>
                     </div>
-                ))}
+                  ))}
+                </div>
+              </div>
             </div>
-        </>
-    );
+          </div>
+        ))}
+      </div>
+    </>
+  );
 }
