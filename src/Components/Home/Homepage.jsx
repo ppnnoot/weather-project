@@ -27,8 +27,8 @@ export default function Homepage(){
     useEffect(() => {
         update();
         const intervalId = setInterval(update, 1000);
-        return () => clearInterval(intervalId); // Cleanup the interval on component unmount
-    }, []); // Empty dependency array for mounting effect
+        return () => clearInterval(intervalId);
+    }, []); 
 
     
     function changeBackgroundColor() {
