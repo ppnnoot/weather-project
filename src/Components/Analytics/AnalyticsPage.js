@@ -10,6 +10,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 export default function AnalyticsPage() {
     const dispatch = useDispatch();
     const [selectedItem, setSelectedItem] = useState({});
+    const [hoveredItem, setHoveredItem] = useState(null);
     const { today, forecast, weekly, status, error } = useSelector((state) => state.weather);
     const lastsearch = useSelector((state) => state.weather.lastSearch)
 
@@ -130,8 +131,11 @@ export default function AnalyticsPage() {
               <div className="bg-gray-800  rounded-lg shadow-xl col-span-4 p-4">
                 <div className="h-full text-blue text-center flex space-x-3 overflow-x-hidden hover:overflow-x-scroll mb-3">
                   {weekly.list.slice(0, forecastItem.count).map((forecastItem) => (
-                    <div className='w-40 h-full bg-white p-2 rounded'>
-                      <div key={forecastItem.dt} className="" style={{ width: '100px' }}
+                    <div className='w-40 h-full bg-white p-2 rounded cursor-pointer'
+                    style={{border: hoveredItem === forecastItem.dt ? '2px solid orange' : '2px solid transparent'}}
+                    onMouseEnter={() => setHoveredItem(forecastItem.dt)}
+                    onMouseLeave={() => setHoveredItem(null)}>
+                      <div key={forecastItem.dt} className="" style={{width: '100px'}}
                         onClick={() => handleClick(forecastItem)}>
                         <img
                           src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}@2x.png`}
