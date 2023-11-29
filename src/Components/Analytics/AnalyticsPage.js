@@ -132,7 +132,7 @@ export default function AnalyticsPage() {
                 <div className="h-full text-blue text-center flex space-x-3 overflow-x-hidden hover:overflow-x-scroll mb-3">
                   {weekly.list.slice(0, forecastItem.count).map((forecastItem) => (
                     <div className='w-40 h-full bg-white p-2 rounded cursor-pointer'
-                    style={{border: hoveredItem === forecastItem.dt ? '2px solid orange' : '2px solid transparent'}}
+                    style={{transform: `scale(${hoveredItem === forecastItem.dt ? '0.95' : '1'})`,transition: 'transform 0.2s'}}
                     onMouseEnter={() => setHoveredItem(forecastItem.dt)}
                     onMouseLeave={() => setHoveredItem(null)}>
                       <div key={forecastItem.dt} className="" style={{width: '100px'}}
