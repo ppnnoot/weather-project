@@ -23,11 +23,14 @@ export default function Homepage(){
           
         setDate(formationDate);
       }
+
     useEffect(() => {
         update();
-        setInterval(update, 1000);
-    }, {})
+        const intervalId = setInterval(update, 1000);
+        return () => clearInterval(intervalId); // Cleanup the interval on component unmount
+    }, []); // Empty dependency array for mounting effect
 
+    
     function changeBackgroundColor() {
         const containerTop = document.querySelector('.container-top');
         const currentHour = new Date().getHours();
