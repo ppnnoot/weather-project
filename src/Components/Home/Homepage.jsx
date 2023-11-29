@@ -11,7 +11,7 @@ export default function Homepage(){
     const lastsearch = useSelector((state)=> state.weather.lastSearch)
     const [date, setDate] = useState(" ")
     
-    const update = () => {
+    const updateAndChangeBackgroundColor = () => {
         var currentDate = new Date();
         var day = currentDate.getDate();
         var month = currentDate.getMonth() + 1;
@@ -20,35 +20,29 @@ export default function Homepage(){
         var minutes = currentDate.getMinutes();
         var sec = currentDate.getSeconds();
         var formationDate = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + sec;
-          
-        setDate(formationDate);
-      }
 
+        setDate(formationDate);
+    
+        const containerTop = document.querySelector('.container-top');
+        if (containerTop && containerTop.style) {
+            if (hours >= 6 && hours < 16) {
+                containerTop.style.backgroundColor = '#FFDB91';
+            } else if (hours >= 16 && hours < 18) {
+                containerTop.style.backgroundColor = '#FFDB91';
+            } else {
+                containerTop.style.backgroundColor = '#16171F';
+                containerTop.style.color = 'white';
+            }
+        }
+    };
+    
     useEffect(() => {
-        update();
-        const intervalId = setInterval(update, 1000);
+        updateAndChangeBackgroundColor();
+        const intervalId = setInterval(updateAndChangeBackgroundColor, 1000);
         return () => clearInterval(intervalId);
     }, []); 
-
     
-    function changeBackgroundColor() {
-        const containerTop = document.querySelector('.container-top');
-        const currentHour = new Date().getHours();
-  
-        if (currentHour >= 6 && currentHour < 16) {
-            containerTop.style.backgroundColor = '#FFDB91';
-        } else if (currentHour >= 16 && currentHour < 18) {
-            containerTop.style.backgroundColor = '#FFDB91';
-        } else {
-            containerTop.style.backgroundColor = '#16171F';
-            containerTop.style.color = 'white';
-        }
-      }
-    //   #16171F กลางคืน
-    //   #FFDB91 เช้า
-    //   #BCA970 เย็น
-     
-      setInterval(changeBackgroundColor, 1000);
+    
 
     
     useEffect(() => {
