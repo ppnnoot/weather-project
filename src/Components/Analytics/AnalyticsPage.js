@@ -1,78 +1,154 @@
 import React, { useEffect, useState } from 'react';
-import { fetchWeather } from '../../API/FetchWeather';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchWeatherAsync } from "../../API/WeatherSlice";
 import { list } from '@material-tailwind/react';
 
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+
+const lati = 13.736717
+const longti = 100.523186
+const current_Position = [lati, longti];
+
+const customMarkerIcon = new L.Icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/9356/9356230.png',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
+});
+
 export default function AnalyticsPage() {
-    const [weekForecast, setWeekForecast] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [open, setOpen] = React.useState(1);
+  const dispatch = useDispatch();
+  const { today, forecast, weekly, status, error } = useSelector((state) => state.weather);
+  const [selectedItem, setSelectedItem] = useState({});
+  const lastsearch = useSelector((state) => state.weather.lastSearch);
 
-    const handleOpen = (value) => setOpen(open === value ? 0 : value);
+  const handleClick = (forecastItem) => {
+    setSelectedItem(forecastItem);
+    console.log('Clicked on forecast item:', selectedItem);
+  };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await fetchWeather();
-                setWeekForecast(data.forecast);
-            } catch (error) {
-                console.error('Error fetching weather:', error);
-                setError('Failed to fetch weather data');
-            } finally {
-                setLoading(false);
-            }
-        };
 
-        fetchData();
-    }, []);
+  useEffect(() => {
+    try {
+      if (lastsearch) {
+        const pos = { lat: lastsearch.value.lat, lon: lastsearch.value.lon };
+        dispatch(fetchWeatherAsync(pos));
+      } else {
+        const positionProm = new Promise((posResolve, posReject) => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => posResolve(position.coords),
+              (err) => posReject(new Error(err.message))
+            );
+          } else {
+            posReject(new Error('Geolocation not supported'));
+          }
+        });
 
-    return (
-        <>
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
-                <div className="m-3 h-full">
-                    {error && <p>Error: {error}</p>}
-                    {weekForecast.list.slice(0,1).map((forecastItem) => (
-                        <div key={forecastItem.dt}>
-                            
-                            <div class="grid grid-cols-4 grid-rows-3 gap-x-5 gap-y-5">
-                                <div class="bg-black rounded-lg shadow-xl col-span-2 row-span-2">
-                                    <div className="h-40 max-h-full text-white text-center row-span-2">
-                                    </div>
-                                </div>
-                                <div class="bg-black rounded-lg shadow-xl">
-                                    <div class="h-40 text-white text-center">Temp at {forecastItem.dt_txt} <br></br> {forecastItem.main.temp}°C </div >
-                                </div>
-                                <div class="bg-black rounded-lg shadow-xl">
-                                    <div class="h-40 text-white text-center">Temp Min/Max <br></br> {forecastItem.main.temp_min}°C/{forecastItem.main.temp_max}°C</div>
-                                </div>
-                                <div class="bg-black rounded-lg shadow-xl col-span-2">
-                                    <div class="h-40 text-white text-center">Sea level: {forecastItem.main.sea_level}</div>
-                                </div>
-                                {/* <div class="bg-black rounded-lg shadow-xl col-span-2">
-                                    <div class="h-20 text-white text-center">Air Pollution</div>
-                                </div>
-                                <div class="bg-black rounded-lg shadow-xl col-span-2">
-                                    <div class="h-40 text-white text-center">Pressure: {forecastItem.main.pressure}</div>
-                                </div> */}
-                                <div class="bg-black rounded-lg shadow-xl col-span-4 ">
+        positionProm.then(({ latitude, longitude }) => {
+          const pos = { lat: latitude, lon: longitude };
+          dispatch(fetchWeatherAsync(pos));
+        })
+      }
+    } catch (err) {
+      console.error('Error fetching weather data:', err);
+    }
 
-                                    <div class="h-20 text-blue text-center flex flex-onwrap">{weekForecast.list.slice(0,(forecastItem.count)).map((forecastItem) => (
-                                        <div key={forecastItem.dt}>
-                                            <div class="h-full m-2 bg-white">
-                                                {forecastItem.main.temp}
-                                            </div>
-                                        </div>
-                                    ))}
+  }, [dispatch, lastsearch]);
+  if (status === 'loading') {
+    return <p>Loading...</p>;
+  }
 
-                                    </div>
-                                </div>
-                            </div>      
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  if (!today || !forecast) {
+    return <p>Loading....</p>;
+  }
+
+  return (
+    <>
+      <div className="m-3 h-full">
+        {error && <p className="text-red-500">Error: {error}</p>}
+        {weekly.list.slice(0, 1).map((forecastItem) => (
+          <div key={forecastItem.dt}>
+            <div className="grid grid-cols-4 grid-rows-3 gap-5">
+              <div className="bg-gray-800 rounded-lg shadow-xl col-span-2 row-span-2 items-center justify-center p-4">
+                <div className="h-full text-white text-center col-span-2 row-span-2">
+                  <MapContainer
+                    center={current_Position}
+                    zoom={13}
+                    className="h-full w-full">
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={current_Position} icon={customMarkerIcon}>
+                      <Popup>
+                        <div >
+                          <h2 class="text-center">You were at</h2>
+                          <p>latitude:{lati} , longtitude{longti}</p>
                         </div>
-                    ))}
+                      </Popup>
+                    </Marker>
+                  </MapContainer>
                 </div>
-            )}
-        </>
-    );
+              </div>
+              <div className="bg-gray-800 rounded-lg flex items-center justify-center p-4">
+                <div className="h-40 text-white text-center">
+                  Date <br />
+                  {selectedItem.dt_txt ?? forecastItem.dt_txt}
+                </div>
+              </div>
+              <div className="bg-gray-800 rounded-lg shadow-xl flex items-center justify-center p-4">
+                <div className="h-40 text-white text-center">
+                  Temp: {selectedItem.main?.temp ?? forecastItem.main.temp}°C <br />
+                  Temp Min/Max: <br />
+                  {selectedItem.main?.temp_min ?? forecastItem.main.temp_min}°C/{selectedItem.main?.temp_max ?? forecastItem.main.temp_max}°C
+                  <br />
+                  Feels Like: {selectedItem.main?.feels_like ?? forecastItem.main.feels_like}°C
+                </div>
+              </div>
+              <div className="bg-gray-800 rounded-lg shadow-xl col-span-1 flex items-center justify-center p-4">
+                <div className="h-40 text-white text-center">
+                  Wind <br />
+                  Speed: {selectedItem.wind?.speed ?? forecastItem.wind.speed}<br />
+                  Deg: {selectedItem.wind?.deg ?? forecastItem.wind.deg}<br />
+                  Gust: {selectedItem.wind?.gust ?? forecastItem.wind.gust}
+                </div>
+              </div>
+              <div className="bg-gray-800 rounded-lg shadow-xl col-span-1 flex items-center justify-center p-4">
+                <div className="h-40 text-white text-center">
+                  Pressure: {selectedItem.main?.pressure ?? forecastItem.main.pressure} <br />
+                  Sea level: {selectedItem.main?.sea_level ?? forecastItem.main.sea_level}<br />
+                  Humidity: {selectedItem.main?.humidity ?? forecastItem.main.humidity}
+                </div>
+              </div>
+              <div className="bg-gray-800  rounded-lg shadow-xl col-span-4 p-4">
+                <div className="h-full text-blue text-center flex space-x-3 overflow-x-hidden hover:overflow-x-scroll mb-3">
+                  {weekly.list.slice(0, forecastItem.count).map((forecastItem) => (
+                    <div className='w-40 h-full bg-white p-2 rounded'>
+                      <div key={forecastItem.dt} className="" style={{ width: '100px' }}
+                        onClick={() => handleClick(forecastItem)}>
+                        <img
+                          src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}@2x.png`}
+                          className="icon-small shadow-md"
+                          alt="weather"
+                        />
+                        <p className='text-orange-300'>{new Date(forecastItem.dt_txt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</p>
+                        <p>{new Date(forecastItem.dt_txt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        <p>{forecastItem.main.temp} °C</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
 }
