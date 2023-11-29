@@ -89,8 +89,8 @@ export default function AnalyticsPage() {
                                         <Marker position={lastsearch ? [lastsearch.value.lat, lastsearch.value.lon] : current_Position} icon={customMarkerIcon}>
                                             <Popup>
                                                 <div >
-                                                    <h2 clas="text-center">You were at</h2>
-                                                    {/* <p>latitude:{lati} , longtitude{longti}</p> */}
+                                                    <h2 clas="text-center">Your location is.</h2>
+                                                    <p>latitude:{lastsearch ? [lastsearch.value.lat] : lati} , longtitude{lastsearch ? [lastsearch.value.lon] : longti}</p>
                                                 </div>
                                             </Popup>
                                         </Marker>
