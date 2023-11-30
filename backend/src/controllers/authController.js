@@ -2,9 +2,6 @@ const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 
-
-
-// Register Controller
 exports.register = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -33,8 +30,6 @@ exports.register = async (req, res) => {
   }
 };
 
-
-// Login Controller
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -45,19 +40,14 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid username' });
     }
 
-    console.log('Received Password:', password);
-    console.log('Stored Hashed Password:', user.password);
-
     // Check if the password is correct
-    const passwordMatch = await bcrypt.compare(password,user.password);
-    console.log('Password Match:', passwordMatch);
-
+    const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      return res.status(401).json({ message: 'Invalid password' }); 
+      return res.status(401).json({ message: 'Invalid password' });
     }
 
     // Create a JWT token
-    const token = jwt.sign({ userId: user._id }, 'poom', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, 'your_secret_key', { expiresIn: '1h' });
 
     res.json({ token });
   } catch (error) {
@@ -65,4 +55,3 @@ exports.login = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
-
