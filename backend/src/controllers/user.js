@@ -1,6 +1,17 @@
-
 const User = require('../models/userModel');
 const bcrypt = require("bcrypt");
+
+async function fetchUserById(req, res) {
+    const { id } = req.user;
+    console.log(id)
+    try {
+        const user = await User.findById(id);
+        res.status(200).json({id:user.id,detail: 'asdadad'});
+    } catch (err) {
+        res.status(400).json(err);
+    }
+}
+
 async function fetchAllUser(req,res){
     try {
         const user = await User.find()
@@ -50,4 +61,4 @@ async function signup(req,res){
 }
 
 
-module.exports = {fetchAllUser,fetch,signup}
+module.exports = {fetchAllUser,fetch,signup,fetchUserById}
