@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
 });
 
 // Middleware to hash the password before saving to the database
-userSchema.pre('save', async function (next) {
+/*userSchema.pre('save', async function (next) {
   try {
     if (!this.isModified('password')) {
       return next();
@@ -19,7 +19,7 @@ userSchema.pre('save', async function (next) {
   } catch (error) {
     next(error);
   }
-});
+});*/
 
 // Method to compare passwords
 userSchema.methods.comparePassword = async function (password) {
