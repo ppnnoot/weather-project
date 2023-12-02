@@ -10,4 +10,3 @@ const dataSchema = new mongoose.Schema({
 const DataModel = mongoose.model('Data', dataSchema);
 
 module.exports = DataModel;
-g
