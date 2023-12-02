@@ -93,47 +93,47 @@ export default function Homepage(){
         return <p>Loading....</p>;
     }
     return (
-        <div class="container-weather">
+        <div className="container-weather">
             {/* Use today and forecast data here */}
-            <div class = "container-top">
-                <div class = "left-top">
+            <div className = "container-top">
+                <div className = "left-top">
                     <p>สภาพอากาศปัจจุบัน {date}</p>
                     <br/>
-                    <div class = "pic-top">
-                        <img class="weather-icon" src={`https://openweathermap.org/img/wn/${today.weather[0].icon}@2x.png`}/>
-                        <p class = "font-temp"> {today.main.temp} °C</p> 
+                    <div className = "pic-top">
+                        <img className="weather-icon" src={`https://openweathermap.org/img/wn/${today.weather[0].icon}@2x.png`}/>
+                        <p className = "font-temp"> {today.main.temp} °C</p> 
                     </div>
                         
                 </div>
                 
-                <div class = "right-top">  
+                <div className = "right-top">  
                     <div>
-                        <p class = "font-weater">สภาพอากาศ</p>
+                        <p className = "font-weater">สภาพอากาศ</p>
                             
-                        <p class = "font-CurrentWeather">{today.weather[0].description}</p>
+                        <p className = "font-CurrentWeather">{today.weather[0].description}</p>
                     </div>
                     <div>
-                    <a href='/analytics' class="font-details">
-                        ลายละเอียดเพิ่มเติม <ChevronRightIcon class = "icon-right"/>
+                    <a href='/analytics' className="font-details">
+                        ลายละเอียดเพิ่มเติม <ChevronRightIcon className = "icon-right"/>
                     </a>
                     </div>
                 </div>
             
             </div>
-            <div class = "container-botton">
+            <div className = "container-botton">
                 {forecast.map((forecastItem, index) => (
-                    <div key={index} class = "frame-time">
-                        <div class = "top-box">
+                    <div key={index} className = "frame-time">
+                        <div className = "top-box">
                             <img src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}@2x.png`}/>
                             <p>{forecastItem.dt_txt}</p>
                         </div>
-                        <div class = "botton-box">
-                            <div class = "weather-botton">
-                                <p class = "font-weater-botton">สภาพอากาศ</p>
-                                <p class = "font-weater-botton">{forecastItem.main.temp} °C</p>
+                        <div className = "botton-box">
+                            <div className = "weather-botton">
+                                <p className = "font-weater-botton">สภาพอากาศ</p>
+                                <p className = "font-weater-botton">{forecastItem.main.temp} °C</p>
                             </div>
                             
-                            <p class = "font-temp-button">{forecastItem.weather[0].description}</p>
+                            <p className = "font-temp-button">{forecastItem.weather[0].description}</p>
                             
                         </div>
                         
