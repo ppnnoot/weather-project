@@ -13,17 +13,16 @@ exports.register = async (req, res) => {
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    //const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user
     const newUser = new User({
       username,
-      password: hashedPassword,
+      password,
     });
 
     await newUser.save();
-
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ message: 'User registered successfully',data: newUser});
   } catch (error) {
     console.error(error);
     res.status(500).send('Server Error');
@@ -35,19 +34,20 @@ exports.login = async (req, res) => {
     const { username, password } = req.body;
 
     // Check if the user exists
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username: username });
     if (!user) {
       return res.status(401).json({ message: 'Invalid username' });
     }
 
     // Check if the password is correct
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ message: 'Invalid password' });
+    const isPwdInvalid = await bcrypt.compareSync(password,user.password)
+    if(!isPwdInvalid){
+      console.log("Password incorrect")
+      return res.status(500).json({err: "Password ไม่ถููกต้อง"});
     }
 
     // Create a JWT token
-    const token = jwt.sign({ userId: user._id }, 'your_secret_key', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, 'domhee', { expiresIn: '1h' });
 
     res.json({ token });
   } catch (error) {
