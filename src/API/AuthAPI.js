@@ -1,11 +1,9 @@
 import axios from "axios";
-axios.defaults.baseURL = 'http://localhost:3001/'
+axios.defaults.baseURL = 'http://localhost:3001'
 export async function loginUser(loginInfo){
     try {
-        console.log(loginInfo)
         const res = await axios.post('/api/login',loginInfo)
         const data = res.data
-        console.log(data)
         if(data){
             localStorage.setItem('token',data.token)
             const userData = { username: data.user.username, role: data.user.role };
@@ -41,6 +39,25 @@ export async function checkAuth() {
         }
     } catch (error) {
         console.error('Error during authentication check:', error);
+    }
+}
+
+export async function createUser(data) {
+    try {
+        const res = await axios.post('/api/register', data);
+        const responseData = res.data;
+        console.log(responseData);
+
+        if (responseData && responseData.newUser) {
+            localStorage.setItem('token', responseData.token);
+            const userData = { username: responseData.newUser.username, role: responseData.newUser.role };
+            localStorage.setItem('data', JSON.stringify(userData));
+            return responseData;
+        } else {
+            console.error('User data is missing or undefined:', responseData);
+        }
+    } catch (err) {
+        console.error('Error during registration:', err);
     }
 }
 

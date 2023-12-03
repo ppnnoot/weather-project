@@ -55,10 +55,8 @@ exports.register = async (req, res) => {
         process.env.JWT_SECRET_KEY,
         { expiresIn: '1h' }
     );
-
-    // Set the token as an HttpOnly cookie
     res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-    res.json({ user: newUser, token }); // Use newUser instead of user
+    res.json({ newUser, token });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server Error');

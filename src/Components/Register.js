@@ -1,7 +1,7 @@
 import {Link, Navigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
-import {selectLoginUser} from "../API/AuthSlice";
+import {createUserAsync, selectLoginUser} from "../API/AuthSlice";
 
 
 export default function RegisterPage(){
@@ -32,14 +32,12 @@ export default function RegisterPage(){
                         noValidate
                         className="space-y-6"
                         onSubmit={handleSubmit((data) => {
-                           /* dispatch(
+                           dispatch(
                                 createUserAsync({
-                                    email: data.email,
+                                    username: data.username,
                                     password: data.password,
-                                    addresses: [],
-                                    role:'user'
                                 })
-                            );*/
+                            );
                             console.log(data);
                         })}
                     >

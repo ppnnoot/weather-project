@@ -1,13 +1,10 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {checkAuth, fetchLoggedInUser, loginUser} from "./AuthAPI";
+import {checkAuth, createUser, loginUser} from "./AuthAPI";
 
 
 const initialState = {
     loginUserToken : null,
-    userInfo: null,
     status: 'idle',
-    error: null,
-    userChecked: false,
 }
 
 export const loginUserAsync = createAsyncThunk(
@@ -34,7 +31,18 @@ export const checkedAsync = createAsyncThunk(
         }
     }
 )
-
+export const createUserAsync = createAsyncThunk(
+    'user/create',
+    async (data,{rejectValue})=>{
+        try {
+            const res = await createUser(data);
+            return res
+        }catch (err) {
+            console.log(err);
+            return rejectValue(err);
+        }
+    }
+)
 
 
 export const AuthSlice = createSlice({
@@ -54,6 +62,13 @@ export const AuthSlice = createSlice({
                 state.status = 'idle';
                 state.error = action.payload
             })
+            .addCase(createUserAsync.pending,(state)=>{
+                state.status = 'loading'
+            })
+            .addCase(createUserAsync.fulfilled,(state, action)=>{
+                state.status = 'idle'
+                state.loginUserToken = action.payload;
+            })
             .addCase(checkedAsync.pending,(state)=>{
                 state.status = 'loading'
             })
@@ -70,6 +85,5 @@ export const AuthSlice = createSlice({
 })
 
 export const selectLoginUser = (state) => state.auth.loginUserToken;
-export const selectUserChecked = (state)=> state.auth.userChecked
 
 export default AuthSlice.reducer
