@@ -10,7 +10,7 @@ export default function Homepage(){
     const { today, forecast, status, error } = useSelector((state) => state.weather);
     const lastsearch = useSelector((state)=> state.weather.lastSearch)
     const [date, setDate] = useState(" ")
-    
+
     const update = () => {
         var currentDate = new Date();
         var day = currentDate.getDate();
@@ -20,7 +20,7 @@ export default function Homepage(){
         var minutes = currentDate.getMinutes();
         var sec = currentDate.getSeconds();
         var formationDate = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + sec;
-          
+
         setDate(formationDate);
       }
 
@@ -28,13 +28,11 @@ export default function Homepage(){
         update();
         const intervalId = setInterval(update, 1000);
         return () => clearInterval(intervalId);
-    }, []); 
+    }, []);
 
-    
-    function changeBackgroundColor() {
-        const containerTop = document.querySelector('.container-top');
+
+    function changeBackgroundColor(containerTop) {
         const currentHour = new Date().getHours();
-  
         if (currentHour >= 6 && currentHour < 16) {
             containerTop.style.backgroundColor = '#FFDB91';
         } else if (currentHour >= 16 && currentHour < 18) {
@@ -43,14 +41,15 @@ export default function Homepage(){
             containerTop.style.backgroundColor = '#16171F';
             containerTop.style.color = 'white';
         }
-      }
+    }
+
     //   #16171F กลางคืน
     //   #FFDB91 เช้า
     //   #BCA970 เย็น
-     
+
       setInterval(changeBackgroundColor, 1000);
 
-    
+
     useEffect(() => {
             try {
                 //console.log("lastsearch",lastsearch)
@@ -101,15 +100,15 @@ export default function Homepage(){
                     <br/>
                     <div className = "pic-top">
                         <img className="weather-icon" src={`https://openweathermap.org/img/wn/${today.weather[0].icon}@2x.png`}/>
-                        <p className = "font-temp"> {today.main.temp} °C</p> 
+                        <p className = "font-temp"> {today.main.temp} °C</p>
                     </div>
-                        
+
                 </div>
-                
-                <div className = "right-top">  
+
+                <div className = "right-top">
                     <div>
                         <p className = "font-weater">สภาพอากาศ</p>
-                            
+
                         <p className = "font-CurrentWeather">{today.weather[0].description}</p>
                     </div>
                     <div>
@@ -118,7 +117,7 @@ export default function Homepage(){
                     </a>
                     </div>
                 </div>
-            
+
             </div>
             <div className = "container-botton">
                 {forecast.map((forecastItem, index) => (
@@ -132,16 +131,16 @@ export default function Homepage(){
                                 <p className = "font-weater-botton">สภาพอากาศ</p>
                                 <p className = "font-weater-botton">{forecastItem.main.temp} °C</p>
                             </div>
-                            
+
                             <p className = "font-temp-button">{forecastItem.weather[0].description}</p>
-                            
+
                         </div>
-                        
-                        
+
+
                     </div>
                 ))}
             </div>
-            
+
         </div>
     );
 };
