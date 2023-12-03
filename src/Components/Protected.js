@@ -4,8 +4,8 @@ import {Navigate} from "react-router-dom";
 
 
 export function Protected({children }){
-    const token = localStorage.getItem('token')
-    if(!token){
+    const user = useSelector(selectLoginUser)
+    if(!user){
         return <Navigate to={'/login'} replace={true}></Navigate>
     }
     return children

@@ -10,8 +10,8 @@ export default function Homepage(){
     const { today, forecast, status, error } = useSelector((state) => state.weather);
     const lastsearch = useSelector((state)=> state.weather.lastSearch)
     const [date, setDate] = useState(" ")
-
-    const update = () => {
+    
+    const updateAndChangeBackgroundColor = () => {
         var currentDate = new Date();
         var day = currentDate.getDate();
         var month = currentDate.getMonth() + 1;
@@ -20,8 +20,6 @@ export default function Homepage(){
         var minutes = currentDate.getMinutes();
         var sec = currentDate.getSeconds();
         var formationDate = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + sec;
-        setDate(formationDate);
-      }
 
         setDate(formationDate);
     
@@ -42,26 +40,11 @@ export default function Homepage(){
         updateAndChangeBackgroundColor();
         const intervalId = setInterval(updateAndChangeBackgroundColor, 1000);
         return () => clearInterval(intervalId);
-    }, []);
+    }, []); 
+    
+    
 
-    function changeBackgroundColor(containerTop) {
-        /*const currentHour = new Date().getHours();
-        if (currentHour >= 6 && currentHour < 16) {
-            containerTop.style.backgroundColor = '#FFDB91';
-        } else if (currentHour >= 16 && currentHour < 18) {
-            containerTop.style.backgroundColor = '#FFDB91';
-        } else {
-            containerTop.style.backgroundColor = '#16171F';
-            containerTop.style.color = 'white';
-        }*/
-    }
-
-    //   #16171F กลางคืน
-    //   #FFDB91 เช้า
-    //   #BCA970 เย็น
-
-      setInterval(changeBackgroundColor, 1000);
-
+    
     useEffect(() => {
             try {
                 //console.log("lastsearch",lastsearch)
@@ -104,55 +87,55 @@ export default function Homepage(){
         return <p>Loading....</p>;
     }
     return (
-        <div className="container-weather">
+        <div class="container-weather">
             {/* Use today and forecast data here */}
-            <div className = "container-top">
-                <div className = "left-top">
+            <div class = "container-top">
+                <div class = "left-top">
                     <p>สภาพอากาศปัจจุบัน {date}</p>
                     <br/>
-                    <div className = "pic-top">
-                        <img className="weather-icon" src={`https://openweathermap.org/img/wn/${today.weather[0].icon}@2x.png`}/>
-                        <p className = "font-temp"> {today.main.temp} °C</p>
+                    <div class = "pic-top">
+                        <img class="weather-icon" src={`https://openweathermap.org/img/wn/${today.weather[0].icon}@2x.png`}/>
+                        <p class = "font-temp"> {today.main.temp} °C</p> 
                     </div>
-
+                        
                 </div>
-
-                <div className = "right-top">
+                
+                <div class = "right-top">  
                     <div>
-                        <p className = "font-weater">สภาพอากาศ</p>
-
-                        <p className = "font-CurrentWeather">{today.weather[0].description}</p>
+                        <p class = "font-weater">สภาพอากาศ</p>
+                            
+                        <p class = "font-CurrentWeather">{today.weather[0].description}</p>
                     </div>
                     <div>
-                    <a href='/analytics' className="font-details">
-                        ลายละเอียดเพิ่มเติม <ChevronRightIcon className = "icon-right"/>
+                    <a href='/analytics' class="font-details">
+                        ลายละเอียดเพิ่มเติม <ChevronRightIcon class = "icon-right"/>
                     </a>
                     </div>
                 </div>
-
+            
             </div>
-            <div className = "container-botton">
+            <div class = "container-botton">
                 {forecast.map((forecastItem, index) => (
-                    <div key={index} className = "frame-time">
-                        <div className = "top-box">
+                    <div key={index} class = "frame-time">
+                        <div class = "top-box">
                             <img src={`https://openweathermap.org/img/wn/${forecastItem.weather[0].icon}@2x.png`}/>
                             <p>{forecastItem.dt_txt}</p>
                         </div>
-                        <div className = "botton-box">
-                            <div className = "weather-botton">
-                                <p className = "font-weater-botton">สภาพอากาศ</p>
-                                <p className = "font-weater-botton">{forecastItem.main.temp} °C</p>
+                        <div class = "botton-box">
+                            <div class = "weather-botton">
+                                <p class = "font-weater-botton">สภาพอากาศ</p>
+                                <p class = "font-weater-botton">{forecastItem.main.temp} °C</p>
                             </div>
-
-                            <p className = "font-temp-button">{forecastItem.weather[0].description}</p>
-
+                            
+                            <p class = "font-temp-button">{forecastItem.weather[0].description}</p>
+                            
                         </div>
-
-
+                        
+                        
                     </div>
                 ))}
             </div>
-
+            
         </div>
     );
 };
