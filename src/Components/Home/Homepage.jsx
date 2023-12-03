@@ -33,17 +33,20 @@ export default function Homepage(){
     
     function changeBackgroundColor() {
         const containerTop = document.querySelector('.container-top');
-        const currentHour = new Date().getHours();
-  
-        if (currentHour >= 6 && currentHour < 16) {
-            containerTop.style.backgroundColor = '#FFDB91';
-        } else if (currentHour >= 16 && currentHour < 18) {
-            containerTop.style.backgroundColor = '#FFDB91';
-        } else {
-            containerTop.style.backgroundColor = '#16171F';
-            containerTop.style.color = 'white';
+
+        if (containerTop) {
+            const currentHour = new Date().getHours();
+
+            if (currentHour >= 6 && currentHour < 16) {
+                containerTop.style.backgroundColor = '#FFDB91';
+            } else if (currentHour >= 16 && currentHour < 18) {
+                containerTop.style.backgroundColor = '#FFDB91';
+            } else {
+                containerTop.style.backgroundColor = '#16171F';
+                containerTop.style.color = 'white';
+            }
         }
-      }
+    }
     //   #16171F กลางคืน
     //   #FFDB91 เช้า
     //   #BCA970 เย็น
@@ -53,9 +56,7 @@ export default function Homepage(){
     
     useEffect(() => {
             try {
-                //console.log("lastsearch",lastsearch)
                 if (lastsearch) {
-                    //console.log("dispatch(fetchWeatherAsync(searchData.lat, searchData.lon)")
                     const pos = { lat: lastsearch.value.lat, lon: lastsearch.value.lon };
                     dispatch(fetchWeatherAsync(pos));
                 }else {
