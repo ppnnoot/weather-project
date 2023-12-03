@@ -49,12 +49,22 @@ exports.register = async (req, res) => {
     });
 
     await newUser.save();
-    res.status(201).json({ message: 'User registered successfully', data: newUser });
+
+    const token = jwt.sign(
+        { userId: newUser.id, username: newUser.username }, // Use newUser.id and newUser.username
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: '1h' }
+    );
+
+    // Set the token as an HttpOnly cookie
+    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    res.json({ user: newUser, token }); // Use newUser instead of user
   } catch (error) {
     console.error(error);
     res.status(500).send('Server Error');
   }
 };
+
 
 exports.checkAuth = (req, res, next) => {
   // ดึง token จาก headers

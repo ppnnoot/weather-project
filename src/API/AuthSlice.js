@@ -37,18 +37,6 @@ export const checkedAsync = createAsyncThunk(
 
 
 
-export const fetchLoggedInUserAsync = createAsyncThunk(
-    'user/fetchLoggedInUser',
-    async ()=>{
-        try {
-            const res = await fetchLoggedInUser()
-            return res
-        }catch (err) {
-            
-        }
-    }
-)
-
 export const AuthSlice = createSlice({
     name: 'user',
     initialState,
@@ -78,19 +66,10 @@ export const AuthSlice = createSlice({
                 state.status = 'idle'
                 state.userChecked = true
             })
-            .addCase(fetchLoggedInUserAsync.pending,(state)=>{
-                state.status = 'loading'
-            })
-            .addCase(fetchLoggedInUserAsync.fulfilled,(state,action)=>{
-                state.status = 'idle'
-                state.userInfo = action.payload
-            })
     }
 })
 
 export const selectLoginUser = (state) => state.auth.loginUserToken;
-export const selectUserInfo = (state) => state.auth.userInfo;
-export const selectError = (state) => state.auth.error;
 export const selectUserChecked = (state)=> state.auth.userChecked
 
 export default AuthSlice.reducer
