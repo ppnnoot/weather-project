@@ -1,15 +1,15 @@
 const {Router} = require("express");
 const {fetchAllUser, fetch, signup, fetchUserById} = require("../controllers/user");
-const {register, login, checkAuth, loginUser} = require("../controllers/authController");
+const { checkAuth, loginUser, logoutUser} = require("../controllers/auth");
 const router = Router();
-const passport = require('passport');
 
 
 router.route('/user').get(fetchAllUser)
 router.route('/users').get(fetch)
 router.route('/register').post(signup)
-router.route('/login').post(passport.authenticate('local'),loginUser)
-router.route('/check').get(passport.authenticate('jwt'),checkAuth)
+router.route('/login').post(loginUser)
+router.route('/check').get(checkAuth)
 router.route('/own').get(fetchUserById)
+router.route('/logout').get(logoutUser)
 
 module.exports = router

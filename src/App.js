@@ -17,6 +17,7 @@ import {
     selectUserChecked
 } from "./API/AuthSlice";
 import {useEffect} from "react";
+import LogoutPage from "./Components/LogoutPage";
 
 
 const router = createBrowserRouter([
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
     {
         path: "/register",
         element: <Register />
+    },
+    {
+        path: '/logout',
+        element: <LogoutPage></LogoutPage>
     }
 ])
 
@@ -68,7 +73,6 @@ function App() {
             dispatch(fetchLoggedInUserAsync())
         }
     },[dispatch,user])
-
   return (
       <>
           <div className={'App'}>

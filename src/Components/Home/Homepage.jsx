@@ -32,7 +32,7 @@ export default function Homepage(){
 
 
     function changeBackgroundColor(containerTop) {
-        const currentHour = new Date().getHours();
+        /*const currentHour = new Date().getHours();
         if (currentHour >= 6 && currentHour < 16) {
             containerTop.style.backgroundColor = '#FFDB91';
         } else if (currentHour >= 16 && currentHour < 18) {
@@ -40,7 +40,7 @@ export default function Homepage(){
         } else {
             containerTop.style.backgroundColor = '#16171F';
             containerTop.style.color = 'white';
-        }
+        }*/
     }
 
     //   #16171F กลางคืน
