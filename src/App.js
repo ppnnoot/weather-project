@@ -9,8 +9,15 @@ import Register from "./Pages/Register";
 import {Protected} from "./Components/Protected";
 import {useSelect} from "@material-tailwind/react";
 import {useDispatch, useSelector} from "react-redux";
-import {checkedUserAsync, fetchLoggedInUserAsync, selectLoginUser, selectUserChecked} from "./API/AuthSlice";
+import {
+    checkedAsync,
+    checkedUserAsync,
+    fetchLoggedInUserAsync,
+    selectLoginUser,
+    selectUserChecked
+} from "./API/AuthSlice";
 import {useEffect} from "react";
+import LogoutPage from "./Components/LogoutPage";
 
 
 const router = createBrowserRouter([
@@ -46,6 +53,10 @@ const router = createBrowserRouter([
     {
         path: "/register",
         element: <Register />
+    },
+    {
+        path: '/logout',
+        element: <LogoutPage></LogoutPage>
     }
 ])
 
@@ -54,7 +65,7 @@ function App() {
     const user = useSelector(selectLoginUser)
     const userChecked = useSelector(selectUserChecked)
     useEffect(()=>{
-        dispatch(checkedUserAsync())
+        dispatch(checkedAsync())
     },[dispatch]);
 
     useEffect(()=>{
@@ -62,11 +73,10 @@ function App() {
             dispatch(fetchLoggedInUserAsync())
         }
     },[dispatch,user])
-
   return (
       <>
           <div className={'App'}>
-              {userChecked ||(
+              {!userChecked ||(
                   <RouterProvider router={router} />
               )}
           </div>
