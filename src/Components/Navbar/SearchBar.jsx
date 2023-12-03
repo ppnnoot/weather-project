@@ -12,7 +12,7 @@ export const SearchBar = ({ onSearchChange }) => {
             const data = await fetchLocation(search);
             //console.log(data)
             const options = data.map(location => ({
-                label: `${location.name}, ${location.country}`, // Fix typo here (was .name)
+                label: `${location.name}, ${location.country} ${location.state || ""}  `, // Fix typo here (was .name)
                 value: {
                     lat: location.lat,
                     lon: location.lon
