@@ -3,8 +3,6 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React,{useState} from "react";
 import {SearchBar} from "./SearchBar";
-import {useSelector} from "react-redux";
-import {selectLoginUser, selectUserInfo} from "../../API/AuthSlice";
 import {Link} from "react-router-dom";
 
 const navigation = [
@@ -22,7 +20,6 @@ function classNames(...classes) {
 }
 
 function NavBar({ children }) {
-  //const selctUser = useSelector(selectLoginUser)
   const token = localStorage.getItem('token')
   const storedData = localStorage.getItem('data');
   const data = storedData ? JSON.parse(storedData) : null;

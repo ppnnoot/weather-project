@@ -1,11 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import {loginUserAsync, selectError, selectLoginUser} from "../API/AuthSlice";
+import {loginUserAsync, selectLoginUser} from "../API/AuthSlice";
 
 export default function LoginPage() {
     const dispatch = useDispatch();
-    const error = useSelector(selectError);
     const user = useSelector(selectLoginUser);
     const {
         register,
@@ -19,7 +18,7 @@ export default function LoginPage() {
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         className="mx-auto h-10 w-auto"
-                        src="/ecommerce.png"
+                        src="https://www.creativefabrica.com/wp-content/uploads/2021/03/31/weather-icon-illustration03-Graphics-10205167-1.jpg"
                         alt="Your Company"
                     />
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -48,10 +47,10 @@ export default function LoginPage() {
                                 <input
                                     id="username"
                                     {...register('username', {
-                                        required: 'email is required',
+                                        required: 'Username is required',
 
                                     })}
-                                    defaultValue={'oko2'}
+
                                     type="text"
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
@@ -69,14 +68,14 @@ export default function LoginPage() {
                                 >
                                     Password
                                 </label>
-                                <div className="text-sm">
+                                {/*<div className="text-sm">
                                     <Link
                                         to="/forgot-password"
                                         className="font-semibold text-indigo-600 hover:text-indigo-500"
                                     >
                                         Forgot password?
                                     </Link>
-                                </div>
+                                </div>*/}
                             </div>
                             <div className="mt-2">
                                 <input
@@ -84,7 +83,6 @@ export default function LoginPage() {
                                     {...register('password', {
                                         required: 'password is required',
                                     })}
-                                    defaultValue={'123'}
                                     type="password"
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
@@ -92,7 +90,6 @@ export default function LoginPage() {
                                     <p className="text-red-500">{errors.password.message}</p>
                                 )}
                             </div>
-                            {error && <p className="text-red-500">{error || error.message}</p>}
                         </div>
 
                         <div>

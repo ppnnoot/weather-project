@@ -3,7 +3,7 @@ const router = express.Router();
 const { authenticateToken } = require('../middleware/authMiddleware');
 const DataModel = require('../models/dataModel');
 
-// Middleware ตรวจสอบ Token
+// Middleware Check Token
 router.use(authenticateToken);
 
 // Route ดึงข้อมูลทั้งหมด
