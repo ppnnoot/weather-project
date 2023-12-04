@@ -11,7 +11,7 @@ export default function Homepage(){
     const lastsearch = useSelector((state)=> state.weather.lastSearch)
     const [date, setDate] = useState(" ")
 
-    const update = () => {
+    const updateAndChangeBackgroundColor = () => {
         var currentDate = new Date();
         var day = currentDate.getDate();
         var month = currentDate.getMonth() + 1;
@@ -20,11 +20,9 @@ export default function Homepage(){
         var minutes = currentDate.getMinutes();
         var sec = currentDate.getSeconds();
         var formationDate = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + sec;
-        setDate(formationDate);
-      }
 
         setDate(formationDate);
-    
+
         const containerTop = document.querySelector('.container-top');
         if (containerTop && containerTop.style) {
             if (hours >= 6 && hours < 16) {
@@ -37,59 +35,64 @@ export default function Homepage(){
             }
         }
     };
-    
+
+
     useEffect(() => {
         updateAndChangeBackgroundColor();
         const intervalId = setInterval(updateAndChangeBackgroundColor, 1000);
         return () => clearInterval(intervalId);
     }, []);
 
-    function changeBackgroundColor(containerTop) {
-        /*const currentHour = new Date().getHours();
-        if (currentHour >= 6 && currentHour < 16) {
-            containerTop.style.backgroundColor = '#FFDB91';
-        } else if (currentHour >= 16 && currentHour < 18) {
-            containerTop.style.backgroundColor = '#FFDB91';
-        } else {
-            containerTop.style.backgroundColor = '#16171F';
-            containerTop.style.color = 'white';
-        }*/
-    }
+    function changeBackgroundColor() {
+        const containerTop = document.querySelector('.container-top');
 
+        if (containerTop) {
+            const currentHour = new Date().getHours();
+
+            if (currentHour >= 6 && currentHour < 16) {
+                containerTop.style.backgroundColor = '#FFDB91';
+            } else if (currentHour >= 16 && currentHour < 18) {
+                containerTop.style.backgroundColor = '#FFDB91';
+            } else {
+                containerTop.style.backgroundColor = '#16171F';
+                containerTop.style.color = 'white';
+            }
+        }
+    }
     //   #16171F กลางคืน
     //   #FFDB91 เช้า
     //   #BCA970 เย็น
 
-      setInterval(changeBackgroundColor, 1000);
+    setInterval(changeBackgroundColor, 1000);
 
     useEffect(() => {
-            try {
-                //console.log("lastsearch",lastsearch)
-                if (lastsearch) {
-                    //console.log("dispatch(fetchWeatherAsync(searchData.lat, searchData.lon)")
-                    const pos = { lat: lastsearch.value.lat, lon: lastsearch.value.lon };
-                    dispatch(fetchWeatherAsync(pos));
-                }else {
-                    const positionProm = new Promise((posResolve, posReject) => {
-                        if (navigator.geolocation) {
-                            navigator.geolocation.getCurrentPosition(
-                                (position) => posResolve(position.coords),
-                                (err) => posReject(new Error(err.message))
-                            );
-                        } else {
-                            posReject(new Error('Geolocation not supported'));
-                        }
-                    });
+        try {
+            //console.log("lastsearch",lastsearch)
+            if (lastsearch) {
+                //console.log("dispatch(fetchWeatherAsync(searchData.lat, searchData.lon)")
+                const pos = { lat: lastsearch.value.lat, lon: lastsearch.value.lon };
+                dispatch(fetchWeatherAsync(pos));
+            }else {
+                const positionProm = new Promise((posResolve, posReject) => {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => posResolve(position.coords),
+                            (err) => posReject(new Error(err.message))
+                        );
+                    } else {
+                        posReject(new Error('Geolocation not supported'));
+                    }
+                });
 
-                    positionProm.then(({ latitude, longitude }) => {
-                        //console.log(latitude, longitude);
-                        const pos = { lat: latitude, lon: longitude };
-                        dispatch(fetchWeatherAsync(pos));
-                    })
-                }
-            }catch (err) {
-                    console.error('Error fetching weather data:', err);
-                }
+                positionProm.then(({ latitude, longitude }) => {
+                    //console.log(latitude, longitude);
+                    const pos = { lat: latitude, lon: longitude };
+                    dispatch(fetchWeatherAsync(pos));
+                })
+            }
+        }catch (err) {
+            console.error('Error fetching weather data:', err);
+        }
 
     }, [dispatch,lastsearch]);
     if (status === 'loading') {
@@ -124,9 +127,9 @@ export default function Homepage(){
                         <p className = "font-CurrentWeather">{today.weather[0].description}</p>
                     </div>
                     <div>
-                    <a href='/analytics' className="font-details">
-                        ลายละเอียดเพิ่มเติม <ChevronRightIcon className = "icon-right"/>
-                    </a>
+                        <a href='/analytics' className="font-details">
+                            ลายละเอียดเพิ่มเติม <ChevronRightIcon className = "icon-right"/>
+                        </a>
                     </div>
                 </div>
 
@@ -154,5 +157,6 @@ export default function Homepage(){
             </div>
 
         </div>
-    );
-};
+    )
+
+}
