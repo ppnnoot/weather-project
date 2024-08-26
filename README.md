@@ -1,3 +1,5 @@
+## This is a project during my studies that I developed with my friends, where I am responsible for creating an environment for the team to work together.
+
 # Getting Started Weather-project
 
 ## วิธีการเริ่มต้น
